@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1c1c1c;
+  color: white;
+}
+
+.pagina {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.caixa {
+  width: 100%;
+  max-width: 400px;
+  padding: 35px;
+  text-align: center;
+  background-color: #101010;
+  border: 1px solid #c99b42;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0;
+  color: #d8ad5b;
+  font-size: 28px;
+}
+
+.subtitulo {
+  margin: 12px 0 28px;
+  color: #d4d4d4;
+  font-size: 15px;
+}
+
+.opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#lista-barbeiros {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.botao-usuario,
+.botao-adicionar,
+.botoes-formulario button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.botao-usuario {
+  border: 1px solid #c99b42;
+  background-color: #242424;
+  color: white;
+}
+
+.botao-usuario:hover {
+  background-color: #353535;
+}
+
+.administrador {
+  background-color: #c99b42;
+  color: #111;
+  font-weight: bold;
+}
+
+.administrador:hover {
+  background-color: #ddb76b;
+}
+
+.botao-adicionar {
+  border: 1px dashed #c99b42;
+  background-color: transparent;
+  color: #d8ad5b;
+}
+
+.botao-adicionar:hover {
+  background-color: #282015;
+}
+
+.form-barbeiro {
+  display: none;
+  margin-top: 22px;
+  text-align: left;
+}
+
+.form-barbeiro.ativo {
+  display: block;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #777;
+  border-radius: 5px;
+  outline: none;
+  font-size: 15px;
+}
+
+input:focus {
+  border-color: #c99b42;
+}
+
+.botoes-formulario {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.botoes-formulario button:first-child {
+  border: none;
+  background-color: #c99b42;
+  color: #111;
+}
+
+.botoes-formulario button:last-child {
+  border: 1px solid #777;
+  background-color: #242424;
+  color: white;
+}
+
+#mensagem {
+  min-height: 18px;
+  margin: 16px 0 0;
+  color: #d8ad5b;
+  font-size: 13px;
+}
+
+@media (max-width: 450px) {
+  .caixa {
+    padding: 28px 22px;
+  }
+}

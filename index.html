@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>MeuNegócio | Entrar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="login1.css?v=meunegocio-1" />
+  </head>
+
+  <body>
+    <main class="login-page">
+      <div class="background"></div>
+      <div class="background-overlay"></div>
+
+      <section class="login-card">
+        <header class="brand">
+          <span class="brand-symbol" aria-hidden="true">M</span>
+          <div class="brand-copy">
+            <strong>MeuNegócio</strong>
+            <small>Gestão simples. Crescimento real.</small>
+          </div>
+        </header>
+
+        <div class="divider">
+          <span></span>
+        </div>
+
+        <!-- PRIMEIRA ETAPA: ESCOLHER O TIPO DE USUÁRIO -->
+
+        <section id="etapa-tipo-usuario">
+          <div class="welcome">
+            <h2>Bem-vindo</h2>
+
+            <p>
+              Selecione como você deseja acessar o sistema.
+            </p>
+          </div>
+
+          <div class="opcoes-usuario">
+            <button
+              id="botao-tipo-administrador"
+              class="botao-tipo administrador"
+              type="button"
+            >
+              <span class="icone-usuario">A</span>
+
+              <span class="texto-botao">
+                <strong>Administrador</strong>
+                <small>Gerenciar toda a barbearia</small>
+              </span>
+
+              <span class="seta">→</span>
+            </button>
+
+            <button
+              id="botao-tipo-recepcionista"
+              class="botao-tipo"
+              type="button"
+            >
+              <span class="icone-usuario">R</span>
+
+              <span class="texto-botao">
+                <strong>Recepcionista</strong>
+                <small>Gerenciar agendas e atendimentos</small>
+              </span>
+
+              <span class="seta">→</span>
+            </button>
+
+            <button
+              id="botao-tipo-barbeiro"
+              class="botao-tipo"
+              type="button"
+            >
+              <span class="icone-usuario">B</span>
+
+              <span class="texto-botao">
+                <strong>Barbeiro</strong>
+                <small>Acessar agenda e atendimentos</small>
+              </span>
+
+              <span class="seta">→</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- SEGUNDA ETAPA: ESCOLHER O BARBEIRO -->
+
+        <section
+          id="etapa-barbeiros"
+          class="etapa escondida"
+        >
+          <div class="welcome">
+            <h2>Escolha o barbeiro</h2>
+
+            <p>
+              Selecione o seu usuário para continuar.
+            </p>
+          </div>
+
+          <div
+            id="lista-barbeiros"
+            class="lista-barbeiros"
+          >
+            <p class="carregando">
+              Carregando barbeiros...
+            </p>
+          </div>
+
+          <p
+            id="mensagem-barbeiros"
+            class="form-message"
+          ></p>
+
+          <button
+            id="voltar-tipos"
+            class="botao-voltar"
+            type="button"
+          >
+            ← Voltar
+          </button>
+        </section>
+
+        <!-- TERCEIRA ETAPA: DIGITAR A SENHA -->
+
+        <section
+          id="etapa-senha"
+          class="etapa escondida"
+        >
+          <div class="welcome">
+            <p
+              id="tipo-usuario-selecionado"
+              class="tipo-selecionado"
+            >
+              Acesso
+            </p>
+
+            <h2 id="nome-usuario-selecionado">
+              Usuário
+            </h2>
+
+            <p>
+              Entre com seu e-mail e senha para acessar o sistema.
+            </p>
+          </div>
+
+          <form id="login-form">
+            <label for="email">E-mail</label>
+
+            <div class="password-field">
+              <svg
+                class="lock-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M3 5h18v14H3zM3 6l9 7 9-7" />
+              </svg>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Digite seu e-mail"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <label for="password">Senha</label>
+
+            <div class="password-field">
+              <svg
+                class="lock-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm6 4v3"
+                />
+              </svg>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                required
+              />
+
+              <button
+                id="toggle-password"
+                class="toggle-password"
+                type="button"
+                aria-label="Mostrar senha"
+              >
+                <svg
+                  class="eye-open"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                  />
+
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="2.8"
+                  />
+                </svg>
+
+                <svg
+                  class="eye-closed"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="m3 3 18 18" />
+
+                  <path
+                    d="M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a17.7 17.7 0 0 1-3.2 3.8"
+                  />
+
+                  <path
+                    d="M6.2 6.2A17.8 17.8 0 0 0 2.5 12s3.5 6 9.5 6c1.1 0 2.1-.2 3-.5"
+                  />
+
+                  <path
+                    d="M9.8 9.8a3.1 3.1 0 0 0 4.4 4.4"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <p
+              id="form-message"
+              class="form-message"
+            ></p>
+
+            <button
+              class="submit-button"
+              type="submit"
+            >
+              Entrar
+              <span>→</span>
+            </button>
+          </form>
+
+          <button
+            id="voltar-selecao"
+            class="botao-voltar"
+            type="button"
+          >
+            ← Trocar usuário
+          </button>
+        </section>
+
+        <p class="footer-text">
+          Sua rotina organizada em um só lugar.
+        </p>
+      </section>
+    </main>
+
+    <script
+      type="module"
+      src="login1.js"
+    ></script>
+  </body>
+</html>

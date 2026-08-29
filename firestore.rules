@@ -1,0 +1,63 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function estaLogado() {
+      return request.auth != null;
+    }
+
+    function possuiCadastro() {
+      return estaLogado()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid));
+    }
+
+    function usuarioAtual() {
+      return get(
+        /databases/$(database)/documents/usuarios/$(request.auth.uid)
+      ).data;
+    }
+
+    function estaAtivo() {
+      return possuiCadastro() && usuarioAtual().ativo == true;
+    }
+
+    function ehAdministrador() {
+      return estaAtivo() && usuarioAtual().cargo == "administrador";
+    }
+
+    function pertenceAoEstabelecimento(estabelecimentoId) {
+      return estaAtivo()
+        && usuarioAtual().estabelecimentoId == estabelecimentoId;
+    }
+
+    match /usuarios/{usuarioId} {
+      allow read: if estaAtivo()
+        && (
+          request.auth.uid == usuarioId
+          || (
+            ehAdministrador()
+            && resource.data.estabelecimentoId
+              == usuarioAtual().estabelecimentoId
+          )
+        );
+
+      allow create: if ehAdministrador()
+        && request.resource.data.estabelecimentoId
+          == usuarioAtual().estabelecimentoId;
+
+      allow update, delete: if ehAdministrador()
+        && resource.data.estabelecimentoId
+          == usuarioAtual().estabelecimentoId;
+    }
+
+    match /estabelecimentos/{estabelecimentoId}/{documento=**} {
+      allow read: if pertenceAoEstabelecimento(estabelecimentoId);
+      allow write: if pertenceAoEstabelecimento(estabelecimentoId)
+        && ehAdministrador();
+    }
+
+    match /{documento=**} {
+      allow read, write: if false;
+    }
+  }
+}

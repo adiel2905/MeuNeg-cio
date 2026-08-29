@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>MeuNegócio | Painel</title>
+
+    <link rel="stylesheet" href="dashboard.css?v=meunegocio-pastel-1" />
+    <link rel="stylesheet" href="meunegocio-ui.css?v=responsivo-1" />
+  </head>
+
+  <body>
+    <div class="sistema">
+      <aside class="menu-lateral">
+        <div class="marca-menu" aria-label="MeuNegócio">
+          <span class="marca-menu-simbolo" aria-hidden="true">M</span>
+          <span class="marca-menu-texto">
+            <strong>MeuNegócio</strong>
+            <small>Gestão inteligente</small>
+          </span>
+        </div>
+
+        <nav id="menu"></nav>
+      </aside>
+
+      <main class="conteudo">
+        <header class="cabecalho">
+          <div>
+            <p class="texto-pequeno">
+              Área do sistema
+            </p>
+
+            <h2 id="boas-vindas">
+              Boas-vindas!
+            </h2>
+          </div>
+
+          <div
+            id="escolher-barbeiro"
+            class="escolher-barbeiro"
+          >
+            <label for="select-barbeiro">
+              Visualizar agenda de:
+            </label>
+
+            <select id="select-barbeiro">
+              <option value="">
+                Escolha um barbeiro
+              </option>
+            </select>
+          </div>
+        </header>
+
+        <!-- =====================================================
+             DASHBOARD
+        ====================================================== -->
+
+        <section
+          id="tela-dashboard"
+          class="agenda-area"
+        >
+          <div class="agenda-titulo">
+            <div>
+              <h3>Agenda</h3>
+
+              <p id="texto-agenda">
+                Carregando agenda...
+              </p>
+            </div>
+
+            <div class="controles-zoom">
+              <button
+                id="botao-vender-produtos"
+                class="botao-principal botao-vender-produtos"
+                type="button"
+              >
+                Venda de produtos
+              </button>
+
+              <span>
+                Zoom da grade
+              </span>
+
+              <button
+                id="diminuir-zoom"
+                class="botao-zoom"
+                type="button"
+                aria-label="Diminuir zoom da grade"
+              >
+                −
+              </button>
+
+              <button
+                id="aumentar-zoom"
+                class="botao-zoom"
+                type="button"
+                aria-label="Aumentar zoom da grade"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          <div class="painel-resumo-dia" aria-label="Resumo da agenda de hoje">
+            <article class="indicador-dashboard indicador-total">
+              <span class="indicador-icone">01</span>
+              <div>
+                <small>Agenda de hoje</small>
+                <strong id="resumo-agendados-hoje">0</strong>
+                <p>horários marcados</p>
+              </div>
+            </article>
+
+            <article class="indicador-dashboard indicador-proximo">
+              <span class="indicador-icone">02</span>
+              <div>
+                <small>Próximo horário</small>
+                <strong id="resumo-proximo-horario">—</strong>
+                <p id="resumo-proximo-cliente">Nenhum cliente</p>
+              </div>
+            </article>
+
+            <article class="indicador-dashboard indicador-concluido">
+              <span class="indicador-icone">03</span>
+              <div>
+                <small>Concluídos hoje</small>
+                <strong id="resumo-concluidos-hoje">0</strong>
+                <p>atendimentos finalizados</p>
+              </div>
+            </article>
+
+            <article class="indicador-dashboard indicador-pendente">
+              <span class="indicador-icone">04</span>
+              <div>
+                <small>Pendentes hoje</small>
+                <strong id="resumo-pendentes-hoje">0</strong>
+                <p>atendimentos restantes</p>
+              </div>
+            </article>
+          </div>
+
+          <div
+            id="agenda-scroll"
+            class="agenda-scroll"
+          >
+            <div
+              id="agenda"
+              class="agenda"
+            ></div>
+          </div>
+
+          <section class="proximos-agendamentos">
+            <div class="titulo-proximos-agendamentos">
+              <div>
+                <h3>
+                  Próximos horários
+                </h3>
+
+                <p>
+                  Agendamentos organizados por data e horário.
+                </p>
+              </div>
+
+              <span id="quantidade-proximos-agendamentos">
+                0 horários
+              </span>
+            </div>
+
+            <div
+              id="lista-proximos-agendamentos"
+              class="lista-proximos-agendamentos"
+            >
+              <p class="lista-agendamentos-vazia">
+                Nenhum horário marcado.
+              </p>
+            </div>
+          </section>
+        </section>
+
+        <!-- =====================================================
+             BARBEIROS
+        ====================================================== -->
+
+        <section
+          id="tela-barbeiros"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento">
+            <div>
+              <p class="texto-pequeno">
+                Gerenciamento da equipe
+              </p>
+
+              <h3>
+                Barbeiros
+              </h3>
+            </div>
+          </div>
+
+          <div class="linha-principal">
+            <button
+              id="botao-mostrar-cadastro-barbeiro"
+              class="botao-principal botao-cadastrar"
+              type="button"
+            >
+              Cadastrar barbeiro
+            </button>
+
+            <input
+              id="pesquisa-barbeiro"
+              class="barra-pesquisa"
+              type="text"
+              placeholder="Pesquisar barbeiro..."
+              autocomplete="off"
+            />
+          </div>
+
+          <form
+            id="form-cadastro-barbeiro"
+            class="form-cadastro escondida"
+          >
+            <label for="nome-novo-barbeiro">
+              Nome do barbeiro
+            </label>
+
+            <input
+              id="nome-novo-barbeiro"
+              type="text"
+              placeholder="Digite o nome do barbeiro"
+              autocomplete="off"
+              required
+            />
+
+            <label for="senha-novo-barbeiro">
+              Senha do barbeiro
+            </label>
+
+            <input
+              id="senha-novo-barbeiro"
+              type="password"
+              minlength="4"
+              placeholder="Digite uma senha com pelo menos 4 caracteres"
+              autocomplete="new-password"
+              required
+            />
+
+            <label for="confirmar-senha-novo-barbeiro">
+              Confirmar senha
+            </label>
+
+            <input
+              id="confirmar-senha-novo-barbeiro"
+              type="password"
+              minlength="4"
+              placeholder="Digite novamente a senha"
+              autocomplete="new-password"
+              required
+            />
+
+            <button
+              class="botao-principal botao-salvar"
+              type="submit"
+            >
+              Salvar barbeiro
+            </button>
+          </form>
+
+          <p
+            id="mensagem-barbeiro"
+            class="mensagem"
+          ></p>
+
+          <div
+            id="lista-gerenciar-barbeiros"
+            class="lista-gerenciamento"
+          ></div>
+        </section>
+
+        <!-- =====================================================
+             CLIENTES
+        ====================================================== -->
+
+        <section
+          id="tela-clientes"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento">
+            <div>
+              <p class="texto-pequeno">
+                Área do sistema
+              </p>
+
+              <h3>
+                Clientes cadastrados
+              </h3>
+            </div>
+          </div>
+
+          <div class="linha-principal">
+            <button
+              id="botao-mostrar-cadastro-cliente"
+              class="botao-principal botao-cadastrar"
+              type="button"
+            >
+              Cadastrar cliente
+            </button>
+
+            <input
+              id="pesquisa-cliente"
+              class="barra-pesquisa"
+              type="text"
+              placeholder="Pesquisar cliente ou celular..."
+              autocomplete="off"
+            />
+          </div>
+
+          <form
+            id="form-cadastro-cliente"
+            class="form-cadastro escondida"
+          >
+            <input id="cliente-id-edicao" type="hidden" />
+            <label for="nome-novo-cliente">
+              Nome do cliente
+            </label>
+
+            <input
+              id="nome-novo-cliente"
+              type="text"
+              placeholder="Digite o nome do cliente"
+              autocomplete="off"
+              required
+            />
+
+            <label for="celular-novo-cliente">
+              Número de celular
+            </label>
+
+            <input
+              id="celular-novo-cliente"
+              type="text"
+              inputmode="numeric"
+              maxlength="15"
+              placeholder="(00) 00000-0000"
+              autocomplete="off"
+              required
+            />
+
+            <div class="botoes-form-cliente">
+              <button id="salvar-cliente" class="botao-principal botao-salvar" type="submit">
+                Salvar cliente
+              </button>
+              <button id="cancelar-edicao-cliente" class="botao-secundario escondida" type="button">
+                Cancelar
+              </button>
+            </div>
+          </form>
+
+          <p
+            id="mensagem-cliente"
+            class="mensagem"
+          ></p>
+
+          <div
+            id="lista-gerenciar-clientes"
+            class="lista-gerenciamento"
+          ></div>
+        </section>
+
+        <!-- =====================================================
+             WHATSAPP
+        ====================================================== -->
+
+        <section id="tela-whatsapp" class="tela-gerenciamento tela-whatsapp escondida">
+          <div class="cabecalho-whatsapp">
+            <button id="botao-adicionar-mensagem-whatsapp" class="botao-principal" type="button">
+              + Adicionar campo de mensagem
+            </button>
+          </div>
+
+          <div id="campos-mensagens-whatsapp" class="campos-mensagens-whatsapp"></div>
+        </section>
+
+        <!-- =====================================================
+             PRODUTOS E SERVIÇOS
+        ====================================================== -->
+
+        <section
+          id="tela-produtos-servicos"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento">
+            <div>
+              <p class="texto-pequeno">
+                Catálogo da barbearia
+              </p>
+
+              <h3>
+                Produtos e Serviços
+              </h3>
+            </div>
+          </div>
+
+          <div class="area-produtos-servicos">
+
+            <!-- PRODUTOS -->
+
+            <div class="bloco-produtos-servicos">
+              <div class="cabecalho-catalogo">
+                <div>
+                  <h4>
+                    Produtos
+                  </h4>
+
+                  <p>
+                    Cadastre os produtos vendidos pela barbearia.
+                  </p>
+                </div>
+
+                <button
+                  id="botao-mostrar-cadastro-produto"
+                  class="botao-principal"
+                  type="button"
+                >
+                  Cadastrar produto
+                </button>
+              </div>
+
+              <form
+                id="form-cadastro-produto"
+                class="form-cadastro escondida"
+              >
+                <label for="nome-novo-produto">
+                  Nome do produto
+                </label>
+
+                <input
+                  id="nome-novo-produto"
+                  type="text"
+                  placeholder="Ex.: Pomada modeladora"
+                  autocomplete="off"
+                  required
+                />
+
+                <label for="valor-novo-produto">
+                  Valor do produto
+                </label>
+
+                <input
+                  id="valor-novo-produto"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="R$ 0,00"
+                  autocomplete="off"
+                  required
+                />
+
+                <button
+                  class="botao-principal botao-salvar"
+                  type="submit"
+                >
+                  Salvar produto
+                </button>
+              </form>
+
+              <p
+                id="mensagem-produto"
+                class="mensagem"
+              ></p>
+
+              <input
+                id="pesquisa-produto"
+                class="barra-pesquisa"
+                type="text"
+                placeholder="Pesquisar produto..."
+                autocomplete="off"
+              />
+
+              <div
+                id="lista-produtos"
+                class="lista-gerenciamento lista-catalogo"
+              >
+                <p class="lista-vazia">
+                  Nenhum produto cadastrado.
+                </p>
+              </div>
+            </div>
+
+            <!-- SERVIÇOS -->
+
+            <div class="bloco-produtos-servicos">
+              <div class="cabecalho-catalogo">
+                <div>
+                  <h4>
+                    Serviços
+                  </h4>
+
+                  <p>
+                    Cadastre os serviços prestados pela barbearia.
+                  </p>
+                </div>
+
+                <button
+                  id="botao-mostrar-cadastro-servico"
+                  class="botao-principal"
+                  type="button"
+                >
+                  Cadastrar serviço
+                </button>
+              </div>
+
+              <form
+                id="form-cadastro-servico"
+                class="form-cadastro escondida"
+              >
+                <label for="nome-novo-servico">
+                  Nome do serviço
+                </label>
+
+                <input
+                  id="nome-novo-servico"
+                  type="text"
+                  placeholder="Ex.: Corte degradê"
+                  autocomplete="off"
+                  required
+                />
+
+                <label for="valor-novo-servico">
+                  Valor do serviço
+                </label>
+
+                <input
+                  id="valor-novo-servico"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="R$ 0,00"
+                  autocomplete="off"
+                  required
+                />
+
+                <button
+                  class="botao-principal botao-salvar"
+                  type="submit"
+                >
+                  Salvar serviço
+                </button>
+              </form>
+
+              <p
+                id="mensagem-servico"
+                class="mensagem"
+              ></p>
+
+              <input
+                id="pesquisa-servico"
+                class="barra-pesquisa"
+                type="text"
+                placeholder="Pesquisar serviço..."
+                autocomplete="off"
+              />
+
+              <div
+                id="lista-servicos"
+                class="lista-gerenciamento lista-catalogo"
+              >
+                <p class="lista-vazia">
+                  Nenhum serviço cadastrado.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <!-- =====================================================
+             PLANOS
+        ====================================================== -->
+
+        <section
+          id="tela-planos"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento topo-planos">
+            <div>
+              <p class="texto-pequeno">Assinaturas da barbearia</p>
+              <h3>Planos</h3>
+            </div>
+          </div>
+
+          <div class="linha-principal linha-planos">
+            <button
+              id="botao-mostrar-cadastro-plano"
+              class="botao-principal botao-cadastrar"
+              type="button"
+            >
+              Criar novo plano
+            </button>
+
+            <input
+              id="pesquisa-plano"
+              class="barra-pesquisa"
+              type="text"
+              placeholder="Pesquisar plano..."
+              autocomplete="off"
+            />
+          </div>
+
+          <form
+            id="form-cadastro-plano"
+            class="form-cadastro form-plano escondida"
+          >
+            <input id="plano-id-edicao" type="hidden" />
+
+            <label for="valor-novo-plano">Valor mensal</label>
+            <input
+              id="valor-novo-plano"
+              type="text"
+              inputmode="decimal"
+              placeholder="R$ 0,00"
+              autocomplete="off"
+              required
+            />
+
+            <label for="servico-novo-plano">Serviço incluído</label>
+            <select id="servico-novo-plano" required>
+              <option value="">Selecione o serviço</option>
+            </select>
+
+            <label for="usos-novo-plano">Quantidade de usos por mês</label>
+            <input
+              id="usos-novo-plano"
+              type="number"
+              min="1"
+              step="1"
+              placeholder="Ex.: 4"
+              required
+            />
+
+            <div class="botoes-form-plano">
+              <button class="botao-principal botao-salvar" type="submit">
+                Salvar plano
+              </button>
+              <button
+                id="cancelar-edicao-plano"
+                class="botao-secundario"
+                type="button"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+
+          <p id="mensagem-plano" class="mensagem"></p>
+
+          <div id="lista-planos" class="lista-planos">
+            <p class="lista-vazia">Nenhum plano cadastrado.</p>
+          </div>
+        </section>
+
+        <!-- =====================================================
+             CONFIGURAÇÕES
+        ====================================================== -->
+
+        <section
+          id="tela-configuracoes"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento">
+            <div>
+              <p class="texto-pequeno">
+                Área do sistema
+              </p>
+
+              <h3>
+                Configurações
+              </h3>
+            </div>
+          </div>
+
+          <div class="cartao-configuracao configuracao-dispositivo">
+            <div class="cabecalho-configuracao-dispositivo">
+              <span class="icone-configuracao-dispositivo" aria-hidden="true">↔</span>
+              <div>
+                <h4>Experiência neste aparelho</h4>
+                <p>Escolha como o aplicativo deve organizar os menus, telas e botões.</p>
+              </div>
+            </div>
+
+            <div class="opcoes-dispositivo" role="radiogroup" aria-label="Tipo de aparelho">
+              <label class="opcao-dispositivo">
+                <input type="radio" name="modo-dispositivo" value="automatico" />
+                <span>
+                  <strong>Automático</strong>
+                  <small>Adapta-se ao tamanho da tela</small>
+                </span>
+              </label>
+
+              <label class="opcao-dispositivo">
+                <input type="radio" name="modo-dispositivo" value="computador" />
+                <span>
+                  <strong>Computador</strong>
+                  <small>Mais conteúdo lado a lado</small>
+                </span>
+              </label>
+
+              <label class="opcao-dispositivo">
+                <input type="radio" name="modo-dispositivo" value="celular" />
+                <span>
+                  <strong>Celular</strong>
+                  <small>Toque fácil e telas compactas</small>
+                </span>
+              </label>
+            </div>
+
+            <p id="mensagem-dispositivo" class="mensagem"></p>
+          </div>
+
+          <div class="cartao-configuracao configuracao-tema-legada">
+            <h4>
+              Tema do sistema
+            </h4>
+
+            <p>
+              Escolha como o sistema aparecerá em todos os computadores.
+            </p>
+
+            <div class="opcoes-tema">
+              <label class="opcao-tema">
+                <input
+                  type="radio"
+                  name="tema"
+                  value="escuro"
+                  checked
+                />
+
+                <span>
+                  <strong>Tema escuro</strong>
+                  <small>Preto e dourado</small>
+                </span>
+              </label>
+
+              <label class="opcao-tema">
+                <input
+                  type="radio"
+                  name="tema"
+                  value="claro"
+                />
+
+                <span>
+                  <strong>Tema claro</strong>
+                  <small>Branco e dourado</small>
+                </span>
+              </label>
+            </div>
+
+            <p
+              id="mensagem-tema"
+              class="mensagem"
+            ></p>
+          </div>
+
+          <div
+            id="configuracao-senha"
+            class="cartao-configuracao escondida"
+          >
+            <h4>
+              Senhas dos usuários
+            </h4>
+
+            <p id="descricao-configuracao-senha">
+              Altere a senha de acesso ao sistema.
+            </p>
+
+            <form
+              id="form-alterar-senha"
+              class="form-configuracao"
+            >
+              <label for="usuario-alterar-senha">
+                Usuário
+              </label>
+
+              <select
+                id="usuario-alterar-senha"
+                required
+              >
+                <option value="">
+                  Selecione um usuário
+                </option>
+
+                <option value="administrador">
+                  Administrador
+                </option>
+
+                <option value="recepcionista">
+                  Recepcionista
+                </option>
+              </select>
+
+              <label for="senha-atual-usuario">
+                Senha atual
+              </label>
+
+              <input
+                id="senha-atual-usuario"
+                type="text"
+                placeholder="Selecione um usuário"
+                autocomplete="off"
+                readonly
+              />
+
+              <label for="nova-senha">
+                Nova senha
+              </label>
+
+              <input
+                id="nova-senha"
+                type="password"
+                minlength="4"
+                placeholder="Digite a nova senha"
+                autocomplete="new-password"
+                required
+              />
+
+              <label for="confirmar-nova-senha">
+                Confirmar nova senha
+              </label>
+
+              <input
+                id="confirmar-nova-senha"
+                type="password"
+                minlength="4"
+                placeholder="Digite novamente a senha"
+                autocomplete="new-password"
+                required
+              />
+
+              <button
+                class="botao-principal"
+                type="submit"
+              >
+                Salvar nova senha
+              </button>
+            </form>
+
+            <p
+              id="mensagem-senha"
+              class="mensagem"
+            ></p>
+          </div>
+
+          <div
+            id="configuracao-apagar-dados"
+            class="cartao-configuracao cartao-configuracao-perigo escondida"
+          >
+            <h4>Apagar banco de dados</h4>
+
+            <p>
+              Apaga todos os dados operacionais para iniciar o aplicativo do zero.
+              As senhas do administrador e da recepção serão preservadas.
+            </p>
+
+            <div class="aviso-apagar-dados">
+              Serão apagados barbeiros, clientes, agendamentos, movimentações,
+              planos, usos de planos, serviços e produtos. Esta ação não pode ser desfeita.
+            </div>
+
+            <label for="senha-administrador-apagar-dados">
+              Senha atual do administrador
+            </label>
+
+            <input
+              id="senha-administrador-apagar-dados"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Digite a senha do administrador"
+            />
+
+            <button
+              id="botao-apagar-dados"
+              class="botao-perigo"
+              type="button"
+            >
+              Apagar todos os dados operacionais
+            </button>
+
+            <p id="mensagem-apagar-dados" class="mensagem"></p>
+          </div>
+        </section>
+
+        <!-- =====================================================
+             RELATÓRIO
+        ====================================================== -->
+
+        <section
+          id="tela-relatorio"
+          class="tela-gerenciamento escondida"
+        >
+          <div class="topo-gerenciamento">
+            <div>
+              <p class="texto-pequeno">
+                Área do sistema
+              </p>
+
+              <h3>
+                Relatório
+              </h3>
+            </div>
+          </div>
+
+          <div class="abas-relatorio">
+            <button
+              id="aba-relatorio-desempenho"
+              class="botao-aba-relatorio ativo"
+              type="button"
+            >
+              Desempenho
+            </button>
+
+            <button
+              id="aba-relatorio-financeiro"
+              class="botao-aba-relatorio escondida"
+              type="button"
+            >
+              Financeiro
+            </button>
+
+            <button
+              id="aba-relatorio-historico"
+              class="botao-aba-relatorio escondida"
+              type="button"
+            >
+              Histórico
+            </button>
+          </div>
+
+          <!-- DESEMPENHO -->
+
+          <div id="conteudo-relatorio-desempenho">
+            <div class="filtros-relatorio">
+              <select id="filtro-relatorio-barbeiro">
+                <option value="todos">
+                  Barbearia inteira
+                </option>
+              </select>
+            </div>
+
+            <div class="resumo-relatorio">
+              <div class="cartao-resumo">
+                <span>
+                  Total concluído
+                </span>
+
+                <strong id="total-concluido">
+                  0
+                </strong>
+              </div>
+
+              <div class="cartao-resumo">
+                <span>
+                  Horário mais atendido
+                </span>
+
+                <strong id="horario-mais-atendido">
+                  —
+                </strong>
+              </div>
+
+              <div class="cartao-resumo">
+                <span>
+                  Dia da semana com mais atendimentos
+                </span>
+
+                <strong id="dia-mais-atendido">
+                  —
+                </strong>
+              </div>
+            </div>
+
+            <div class="calendario-area">
+              <div class="topo-calendario">
+                <button
+                  id="mes-anterior"
+                  class="botao-mes"
+                  type="button"
+                >
+                  ←
+                </button>
+
+                <h4 id="titulo-calendario">
+                  Mês
+                </h4>
+
+                <button
+                  id="proximo-mes"
+                  class="botao-mes"
+                  type="button"
+                >
+                  →
+                </button>
+              </div>
+
+              <div class="dias-semana-calendario">
+                <span>Seg</span>
+                <span>Ter</span>
+                <span>Qua</span>
+                <span>Qui</span>
+                <span>Sex</span>
+                <span>Sáb</span>
+                <span>Dom</span>
+              </div>
+
+              <div
+                id="calendario-relatorio"
+                class="grade-calendario"
+              ></div>
+            </div>
+
+            <div class="grafico-area">
+              <div class="cabecalho-segundo-grafico">
+                <h4 id="titulo-segundo-grafico">
+                  Horário que mais atende
+                </h4>
+
+                <select id="filtro-segundo-grafico">
+                  <option value="horario">
+                    Horário que mais atende
+                  </option>
+
+                  <option value="dia-semana">
+                    Dia da semana que mais atende
+                  </option>
+                </select>
+              </div>
+
+              <canvas id="grafico-status"></canvas>
+            </div>
+          </div>
+
+          <!-- FINANCEIRO -->
+
+          <div
+            id="conteudo-relatorio-financeiro"
+            class="escondida"
+            >
+            <div class="cabecalho-financeiro">
+              <div>
+                <p class="texto-pequeno">
+                  Visão financeira
+                </p>
+
+                <h4>
+                  Resultados da barbearia
+                </h4>
+
+                <p>
+                  Acompanhe os valores recebidos nos atendimentos concluídos.
+                </p>
+              </div>
+
+              <div class="acoes-financeiro">
+                <div class="filtros-financeiros">
+                  <select id="periodo-relatorio-financeiro">
+                    <option value="diario">
+                      Diário
+                    </option>
+
+                    <option value="semanal">
+                      Semanal
+                    </option>
+
+                    <option
+                      value="mensal"
+                      selected
+                    >
+                      Mensal
+                    </option>
+                  </select>
+
+                  <select id="filtro-financeiro-barbeiro">
+                    <option value="todos">
+                      Barbearia inteira
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="navegacao-periodo-financeiro">
+              <button
+                id="periodo-financeiro-anterior"
+                class="botao-mes"
+                type="button"
+              >
+                ←
+              </button>
+
+              <strong id="titulo-periodo-financeiro">
+                Período atual
+              </strong>
+
+              <button
+                id="periodo-financeiro-proximo"
+                class="botao-mes"
+                type="button"
+              >
+                →
+              </button>
+            </div>
+
+            <div class="cards-financeiros">
+              <div class="cartao-financeiro destaque">
+                <span>Faturamento total</span>
+
+                <strong id="financeiro-faturamento-total">
+                  R$ 0,00
+                </strong>
+
+                <small>
+                  Serviços e produtos
+                </small>
+              </div>
+
+              <div class="cartao-financeiro">
+                <span>Total em serviços</span>
+
+                <strong id="financeiro-total-servicos">
+                  R$ 0,00
+                </strong>
+
+                <small id="financeiro-quantidade-servicos">
+                  0 serviços realizados
+                </small>
+              </div>
+
+              <div class="cartao-financeiro">
+                <span>Total em produtos</span>
+
+                <strong id="financeiro-total-produtos">
+                  R$ 0,00
+                </strong>
+
+                <small id="financeiro-quantidade-produtos">
+                  0 produtos vendidos
+                </small>
+              </div>
+
+              <div class="cartao-financeiro">
+                <span>Atendimentos concluídos</span>
+
+                <strong id="financeiro-total-atendimentos-numero">
+                  0
+                </strong>
+
+                <small id="financeiro-total-atendimentos">
+                  0 atendimentos no período
+                </small>
+              </div>
+            </div>
+
+            <div class="grafico-financeiro-area">
+              <div class="cabecalho-grafico-financeiro">
+                <div>
+                  <p class="texto-pequeno">
+                    Evolução do faturamento
+                  </p>
+
+                  <h4 id="titulo-grafico-financeiro">
+                    Faturamento mensal
+                  </h4>
+                </div>
+
+                <strong id="total-grafico-financeiro">
+                  R$ 0,00
+                </strong>
+              </div>
+
+              <div class="container-grafico-financeiro">
+                <canvas id="grafico-financeiro"></canvas>
+              </div>
+            </div>
+
+            <div class="secao-financeira">
+              <div class="titulo-secao-financeira">
+                <div>
+                  <p class="texto-pequeno">
+                    Recebimentos
+                  </p>
+
+                  <h4>
+                    Formas de pagamento
+                  </h4>
+                </div>
+              </div>
+
+              <div class="cards-pagamento">
+                <div class="cartao-pagamento">
+                  <span>Pix</span>
+
+                  <strong id="financeiro-total-pix">
+                    R$ 0,00
+                  </strong>
+
+                  <small id="financeiro-quantidade-pix">
+                    0 pagamentos
+                  </small>
+                </div>
+
+                <div class="cartao-pagamento">
+                  <span>Dinheiro</span>
+
+                  <strong id="financeiro-total-dinheiro">
+                    R$ 0,00
+                  </strong>
+
+                  <small id="financeiro-quantidade-dinheiro">
+                    0 pagamentos
+                  </small>
+                </div>
+
+                <div class="cartao-pagamento">
+                  <span>Cartão</span>
+
+                  <strong id="financeiro-total-cartao">
+                    R$ 0,00
+                  </strong>
+
+                  <small id="financeiro-quantidade-cartao">
+                    0 pagamentos
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="rankings-financeiros">
+              <div class="cartao-ranking-financeiro">
+                <div class="titulo-ranking-financeiro">
+                  <p class="texto-pequeno">
+                    Ranking
+                  </p>
+
+                  <h4>
+                    Repasse dos barbeiros (50%)
+                  </h4>
+                </div>
+
+                <div
+                  id="ranking-financeiro-barbeiros"
+                  class="lista-ranking-financeiro"
+                >
+                  <p class="lista-vazia">
+                    Nenhum atendimento concluído no período.
+                  </p>
+                </div>
+              </div>
+
+              <div class="cartao-ranking-financeiro">
+                <div class="titulo-ranking-financeiro">
+                  <p class="texto-pequeno">
+                    Mais realizados
+                  </p>
+
+                  <h4>
+                    Serviços
+                  </h4>
+                </div>
+
+                <div
+                  id="ranking-financeiro-servicos"
+                  class="lista-ranking-financeiro"
+                >
+                  <p class="lista-vazia">
+                    Nenhum serviço registrado no período.
+                  </p>
+                </div>
+              </div>
+
+              <div class="cartao-ranking-financeiro">
+                <div class="titulo-ranking-financeiro">
+                  <p class="texto-pequeno">
+                    Mais vendidos
+                  </p>
+
+                  <h4>
+                    Produtos
+                  </h4>
+                </div>
+
+                <div
+                  id="ranking-financeiro-produtos"
+                  class="lista-ranking-financeiro"
+                >
+                  <p class="lista-vazia">
+                    Nenhum produto vendido no período.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HISTÓRICO -->
+
+          <div
+            id="conteudo-relatorio-historico"
+            class="escondida"
+           >
+           
+            <div class="cabecalho-historico">
+              <div>
+                <p class="texto-pequeno">
+                  Movimentações financeiras
+                </p>
+
+                <h4>
+                  Histórico
+                </h4>
+
+                <p>
+                  Consulte todas as entradas e saídas da barbearia.
+                </p>
+              </div>
+
+              <div class="acoes-historico">
+                <button
+                  id="botao-registrar-entrada"
+                  class="botao-secundario botao-entrada-manual"
+                  type="button"
+                >
+                  Registrar entrada
+                </button>
+
+                <button
+                  id="gerar-pdf-historico"
+                  class="botao-secundario"
+                  type="button"
+                 >
+                  Gerar PDF
+                </button>
+
+                <button
+                  id="botao-registrar-saida"
+                  class="botao-principal"
+                  type="button"
+                >
+                  Registrar saída
+                </button>
+              </div>
+            </div>
+
+            <div class="filtros-historico">
+              <select id="periodo-historico">
+                <option value="diario" selected>
+                  Diário
+                </option>
+
+                <option value="semanal">
+                  Semanal
+                </option>
+
+                <option value="mensal">
+                  Mensal
+                </option>
+              </select>
+
+              <select id="filtro-historico-barbeiro">
+                <option value="todos">
+                  Barbearia inteira
+                </option>
+              </select>
+
+              <select id="filtro-historico-tipo">
+                <option value="todos">
+                  Entradas e saídas
+                </option>
+
+                <option value="entrada">
+                  Somente entradas
+                </option>
+
+                <option value="saida">
+                  Somente saídas
+                </option>
+              </select>
+
+              <select id="filtro-historico-pagamento">
+                <option value="todos">
+                  Todas as formas
+                </option>
+
+                <option value="Pix">
+                  Pix
+                </option>
+
+                <option value="Cartão">
+                  Cartão
+                </option>
+
+                <option value="Dinheiro">
+                  Dinheiro em espécie
+                </option>
+              </select>
+            </div>
+
+            <div class="navegacao-periodo-historico">
+              <button
+                id="periodo-historico-anterior"
+                class="botao-mes"
+                type="button"
+              >
+                ←
+              </button>
+
+              <strong id="titulo-periodo-historico">
+                Período atual
+              </strong>
+
+              <button
+                id="periodo-historico-proximo"
+                class="botao-mes"
+                type="button"
+              >
+                →
+              </button>
+            </div>
+
+            <div class="cards-historico">
+              <div class="cartao-historico entrada">
+                <span>
+                  Entradas no período
+                </span>
+
+                <strong id="historico-total-entradas">
+                  R$ 0,00
+                </strong>
+
+                <small id="historico-quantidade-entradas">
+                  0 movimentações
+                </small>
+              </div>
+
+              <div class="cartao-historico saida">
+                <span>
+                  Saídas no período
+                </span>
+
+                <strong id="historico-total-saidas">
+                  R$ 0,00
+                </strong>
+
+                <small id="historico-quantidade-saidas">
+                  0 movimentações
+                </small>
+              </div>
+
+              <div class="cartao-historico saldo">
+                <span>
+                  Saldo do período
+                </span>
+
+                <strong id="historico-saldo">
+                  R$ 0,00
+                </strong>
+
+                <small>
+                  Entradas menos saídas
+                </small>
+              </div>
+            </div>
+
+            <div class="area-historico-financeiro">
+              <div class="cabecalho-lista-historico">
+                <div>
+                  <p class="texto-pequeno">
+                    Movimentações
+                  </p>
+
+                  <h4>
+                    Histórico financeiro
+                  </h4>
+                </div>
+
+                <span id="quantidade-movimentacoes-historico">
+                  0 movimentações
+                </span>
+              </div>
+
+              <div
+                id="lista-historico-financeiro"
+                class="lista-historico-financeiro"
+              >
+                <p class="lista-vazia">
+                  Nenhuma movimentação encontrada neste período.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- =====================================================
+         MODAL NOVO AGENDAMENTO
+    ====================================================== -->
+
+    <div
+      id="modal-novo"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-novo"
+        >
+          ×
+        </button>
+
+        <h2>
+          Novo agendamento
+        </h2>
+
+        <p id="informacao-horario"></p>
+
+        <form id="form-agendamento">
+          <input
+            id="data-agendamento"
+            type="hidden"
+          />
+
+          <input
+            id="hora-agendamento"
+            type="hidden"
+          />
+
+          <div class="tipo-agendamento">
+            <p>
+              Tipo de atendimento
+            </p>
+
+            <label>
+              <input
+                type="radio"
+                name="tipo-agendamento"
+                value="Horário marcado"
+                checked
+              />
+
+              Horário marcado
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="tipo-agendamento"
+                value="Atendimento agora"
+              />
+
+              Atendimento agora
+            </label>
+          </div>
+
+          <label for="pesquisa-cliente-agendamento">
+            Cliente
+          </label>
+
+          <input
+            id="pesquisa-cliente-agendamento"
+            type="text"
+            placeholder="Pesquisar cliente..."
+            autocomplete="off"
+          />
+
+          <div
+            id="lista-clientes-agendamento"
+            class="lista-clientes-agendamento"
+          ></div>
+
+          <div class="botoes-modal">
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-novo"
+            >
+              Cancelar
+            </button>
+
+            <button
+              class="botao-principal"
+              type="submit"
+            >
+              Salvar agendamento
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL DETALHES
+    ====================================================== -->
+
+    <div
+      id="modal-detalhes"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-detalhes"
+        >
+          ×
+        </button>
+
+        <h2>
+          Agendamento
+        </h2>
+
+        <p>
+          <strong>Cliente:</strong>
+          <span id="detalhe-cliente"></span>
+        </p>
+
+        <p>
+          <strong>Data:</strong>
+          <span id="detalhe-data"></span>
+        </p>
+
+        <p>
+          <strong>Horário:</strong>
+          <span id="detalhe-hora"></span>
+        </p>
+
+        <p>
+          <strong>Serviços registrados:</strong>
+          <span id="detalhe-servicos-registrados">Ainda não informados</span>
+        </p>
+
+        <div class="botoes-modal">
+          <button
+            id="registrar-servicos-barbeiro"
+            class="botao-principal"
+            type="button"
+          >
+            Registrar serviços realizados
+          </button>
+
+          <button
+            id="concluir-agendamento"
+            class="botao-concluir"
+            type="button"
+          >
+            Agendamento concluído
+          </button>
+
+          <button
+            id="nao-realizado-agendamento"
+            class="botao-nao-realizado"
+            type="button"
+          >
+            Agendamento não realizado
+          </button>
+
+          <button
+            id="cancelar-agendamento"
+            class="botao-perigo"
+            type="button"
+          >
+            Desmarcar agendamento
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-registrar-servicos" class="modal escondido">
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-registrar-servicos"
+        >×</button>
+
+        <h2>Registrar serviços e produtos</h2>
+        <p>Informe os serviços realizados e, se houver, os produtos vendidos. A recepção fará o pagamento depois.</p>
+
+        <form id="form-registrar-servicos">
+          <div id="container-servicos-produzidos" class="bloco-itens-atendimento"></div>
+
+          <button
+            type="button"
+            id="adicionar-servico-produzido"
+            class="botao-adicionar-item-atendimento"
+          >+ Adicionar outro serviço</button>
+
+          <div class="bloco-itens-atendimento bloco-produtos-vendidos-barbeiro">
+            <label>Produtos vendidos</label>
+
+            <div id="container-produtos-vendidos-barbeiro"></div>
+
+            <button
+              type="button"
+              id="adicionar-produto-vendido-barbeiro"
+              class="botao-adicionar-item-atendimento"
+            >+ Adicionar outro produto</button>
+
+            <p class="valor-item-atendimento">
+              Valor dos produtos:
+              <strong id="valor-produtos-vendidos-barbeiro">R$ 0,00</strong>
+            </p>
+          </div>
+
+          <div class="total-atendimento total-registro-barbeiro">
+            <span>Valor total (editável)</span>
+            <input
+              id="valor-total-registro-barbeiro"
+              type="text"
+              inputmode="decimal"
+              value="R$ 0,00"
+              aria-label="Valor total do atendimento"
+              autocomplete="off"
+            />
+            <small>O valor sugerido soma os serviços e produtos. Os produtos pertencem integralmente à barbearia.</small>
+          </div>
+
+          <p id="mensagem-servicos-produzidos" class="mensagem"></p>
+
+          <div class="botoes-modal">
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-registrar-servicos"
+            >Voltar</button>
+            <button class="botao-principal" type="submit">Salvar serviços e produtos</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- =====================================================
+         MODAL CLIENTES DO PLANO
+    ====================================================== -->
+
+    <div id="modal-clientes-plano" class="modal escondido">
+      <div class="janela janela-plano">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-clientes-plano"
+        >×</button>
+
+        <h2 id="titulo-clientes-plano">Adicionar cliente</h2>
+        <p id="resumo-clientes-plano"></p>
+
+        <p class="texto-ajuda-plano">
+          Escolha um cliente já cadastrado para adicionar a este plano.
+        </p>
+
+        <p id="mensagem-clientes-plano" class="mensagem"></p>
+
+        <form id="form-vinculo-cliente-plano" class="form-vinculo-cliente-plano escondida">
+          <input id="cliente-id-vinculo-plano" type="hidden" />
+
+          <div class="cliente-selecionado-plano">
+            Cliente: <strong id="nome-cliente-vinculo-plano"></strong>
+          </div>
+
+          <label for="pagamento-vinculo-plano">Forma de pagamento</label>
+          <select id="pagamento-vinculo-plano" required>
+            <option value="">Selecione</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão">Cartão</option>
+          </select>
+
+          <label for="valor-vinculo-plano">Valor pago pelo plano</label>
+          <input id="valor-vinculo-plano" type="text" inputmode="decimal" required />
+
+          <fieldset class="inicio-ciclo-plano">
+            <legend>Início do ciclo</legend>
+            <label>
+              <input type="radio" name="inicio-ciclo-plano" value="hoje" checked />
+              Começar hoje
+            </label>
+            <label>
+              <input type="radio" name="inicio-ciclo-plano" value="data" />
+              Escolher uma data
+            </label>
+          </fieldset>
+
+          <div id="campo-data-inicio-ciclo-plano" class="escondida">
+            <label for="data-inicio-ciclo-plano">Data de início do ciclo</label>
+            <input id="data-inicio-ciclo-plano" type="date" />
+          </div>
+
+          <div class="botoes-vinculo-plano">
+            <button type="button" id="cancelar-vinculo-cliente-plano" class="botao-secundario">Voltar</button>
+            <button type="submit" class="botao-principal">Confirmar inclusão</button>
+          </div>
+        </form>
+
+        <div
+          id="lista-clientes-disponiveis-plano"
+          class="lista-clientes-disponiveis-plano"
+        ></div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL VERIFICAR PLANO NO ATENDIMENTO
+    ====================================================== -->
+
+    <div id="modal-verificar-plano" class="modal escondido">
+      <div class="janela janela-plano-atendimento">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-verificar-plano"
+        >×</button>
+
+        <h2 id="titulo-verificar-plano">Plano do cliente</h2>
+        <div id="conteudo-verificar-plano" class="conteudo-verificar-plano"></div>
+        <p id="mensagem-verificar-plano" class="mensagem"></p>
+
+        <div id="botoes-verificar-plano" class="botoes-modal"></div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL EXTRAS DO PLANO
+    ====================================================== -->
+
+    <div id="modal-extras-plano" class="modal escondido">
+      <div class="janela janela-plano-atendimento">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-extras-plano"
+        >×</button>
+
+        <h2>Atendimento pelo plano</h2>
+        <p id="texto-extras-plano">
+          O serviço principal será contabilizado no plano.
+        </p>
+
+        <div class="pergunta-extras-plano">
+          <strong>Teve algum produto ou serviço extra?</strong>
+        </div>
+
+        <div class="botoes-modal">
+          <button
+            id="plano-sem-extras"
+            class="botao-secundario"
+            type="button"
+          >Não</button>
+          <button
+            id="plano-com-extras"
+            class="botao-principal"
+            type="button"
+          >Sim</button>
+        </div>
+
+        <p id="mensagem-extras-plano" class="mensagem"></p>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL CONCLUIR ATENDIMENTO
+    ====================================================== -->
+
+    <div
+      id="modal-concluir-atendimento"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-concluir-atendimento"
+        >
+          ×
+        </button>
+
+        <h2 id="titulo-conclusao-atendimento">
+          Concluir atendimento
+        </h2>
+
+        <p id="descricao-conclusao-atendimento">
+          Informe o serviço realizado e a forma de pagamento.
+        </p>
+
+        <form id="form-concluir-atendimento">
+
+          <div class="resumo-cliente-atendimento">
+            <p>
+              <strong>Cliente:</strong>
+              <span id="conclusao-cliente"></span>
+            </p>
+
+            <p>
+              <strong>Barbeiro:</strong>
+              <span id="conclusao-barbeiro"></span>
+            </p>
+
+            <p>
+              <strong>Data e horário:</strong>
+              <span id="conclusao-data-hora"></span>
+            </p>
+          </div>
+
+          <div class="bloco-itens-atendimento">
+
+            <label id="label-servico-atendimento">
+              Serviço realizado
+            </label>
+
+            <div id="container-servicos-atendimento">
+
+              <div class="linha-selecao-atendimento linha-servico-atendimento">
+
+                <select
+                  id="servico-atendimento"
+                  class="select-servico-atendimento"
+                >
+                  <option value="">
+                    Selecione o serviço
+                  </option>
+                </select>
+
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              id="adicionar-servico-atendimento"
+              class="botao-adicionar-item-atendimento"
+            >
+              + Adicionar outro serviço
+            </button>
+
+            <p class="valor-item-atendimento">
+              Valor dos serviços:
+
+              <strong id="valor-servico-atendimento">
+                R$ 0,00
+              </strong>
+            </p>
+
+          </div>
+
+       <!-- =================================================
+     PRODUTOS
+================================================== -->
+          <div class="bloco-itens-atendimento">
+
+            <label>
+              Produto vendido
+            </label>
+
+            <div id="container-produtos-atendimento">
+
+              <div class="linha-selecao-atendimento linha-produto-atendimento">
+
+                <select
+                  id="produto-atendimento"
+                  class="select-produto-atendimento"
+                >
+                  <option value="">
+                    Nenhum produto vendido
+                  </option>
+                </select>
+
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              id="adicionar-produto-atendimento"
+              class="botao-adicionar-item-atendimento"
+            >
+              + Adicionar outro produto
+            </button>
+
+            <p class="valor-item-atendimento">
+              Valor dos produtos:
+
+              <strong id="valor-produto-atendimento">
+                R$ 0,00
+              </strong>
+            </p>
+
+          </div>
+
+
+          <!-- =================================================
+              DESCONTO
+          ================================================== -->
+
+          <div class="bloco-desconto">
+
+            <div
+              id="campo-desconto"
+              class="campo-desconto escondida"
+            >
+
+              <label for="valor-desconto">
+                Valor do desconto
+              </label>
+
+              <input
+                id="valor-desconto"
+                type="text"
+                inputmode="decimal"
+                placeholder="R$ 0,00"
+                autocomplete="off"
+              />
+
+              <small>
+                Este valor será registrado como uma saída no histórico financeiro.
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+              FORMA DE PAGAMENTO
+          ================================================== -->
+
+          <div class="bloco-pagamento-atendimento">
+          <label for="tipo-pagamento-atendimento">
+            Como o cliente vai pagar?
+          </label>
+
+          <select id="tipo-pagamento-atendimento">
+            <option value="unico">Uma forma de pagamento</option>
+            <option value="dividido">Dividir o pagamento</option>
+          </select>
+
+          <div id="pagamento-unico-atendimento">
+          <label for="forma-pagamento-atendimento">
+            Forma de pagamento
+          </label>
+
+          <select id="forma-pagamento-atendimento">
+            <option value="">
+              Selecione a forma de pagamento
+            </option>
+
+            <option value="Dinheiro">
+              Dinheiro
+            </option>
+
+            <option value="Pix">
+              Pix
+            </option>
+
+            <option value="Cartão">
+              Cartão
+            </option>
+          </select>
+          </div>
+
+          <div id="pagamento-dividido-atendimento" class="pagamento-dividido-atendimento escondida">
+            <p class="titulo-pagamento-dividido">Informe quanto foi pago em cada forma</p>
+            <div class="grade-pagamento-dividido">
+              <label><span>Pix</span><input id="valor-pix-atendimento" type="text" inputmode="decimal" value="R$ 0,00" autocomplete="off" /></label>
+              <label><span>Dinheiro</span><input id="valor-dinheiro-atendimento" type="text" inputmode="decimal" value="R$ 0,00" autocomplete="off" /></label>
+              <label><span>Cartão</span><input id="valor-cartao-atendimento" type="text" inputmode="decimal" value="R$ 0,00" autocomplete="off" /></label>
+            </div>
+            <div id="resumo-pagamento-dividido" class="resumo-pagamento-dividido">
+              <span>Total informado: <strong>R$ 0,00</strong></span>
+              <span>Falta informar: <strong>R$ 0,00</strong></span>
+            </div>
+          </div>
+          </div>
+
+          <!-- =================================================
+              TOTAL
+          ================================================== -->
+
+          <div class="total-atendimento">
+
+            <span>
+              Valor a cobrar (editável)
+            </span>
+
+            <input
+              id="valor-total-atendimento"
+              type="text"
+              inputmode="decimal"
+              value="R$ 0,00"
+              aria-label="Valor a cobrar"
+              autocomplete="off"
+            />
+
+          </div>
+
+
+          <p
+            id="mensagem-conclusao-atendimento"
+            class="mensagem"
+          ></p>
+
+
+          <!-- =================================================
+              BOTÕES
+          ================================================== -->
+
+          <div class="botoes-modal">
+
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-concluir-atendimento"
+            >
+              Voltar
+            </button>
+
+            <button
+              class="botao-principal"
+              type="submit"
+            >
+              Confirmar atendimento
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL VENDA DE PRODUTOS
+    ====================================================== -->
+
+    <div id="modal-venda-produtos" class="modal escondido">
+      <div class="janela janela-venda-produtos">
+        <button class="fechar-modal" type="button" data-fechar="modal-venda-produtos">×</button>
+
+        <h2>Venda de produtos</h2>
+        <p>Selecione o cliente, os produtos e a forma de pagamento.</p>
+
+        <form id="form-venda-produtos">
+          <label for="cliente-venda-produtos">Cliente</label>
+          <select id="cliente-venda-produtos" required>
+            <option value="">Selecione o cliente</option>
+          </select>
+
+          <label>Produtos</label>
+          <div id="itens-venda-produtos" class="itens-venda-produtos"></div>
+
+          <button id="adicionar-item-venda-produtos" class="botao-secundario" type="button">
+            + Adicionar outro produto
+          </button>
+
+          <div class="resumo-venda-produtos">
+            <span>Subtotal</span>
+            <strong id="subtotal-venda-produtos">R$ 0,00</strong>
+          </div>
+
+          <label for="tem-desconto-venda-produtos">Aplicar desconto?</label>
+          <select id="tem-desconto-venda-produtos">
+            <option value="nao">Não</option>
+            <option value="sim">Sim</option>
+          </select>
+
+          <div id="campos-desconto-venda-produtos" class="campos-desconto-venda escondida">
+            <label for="desconto-venda-produtos">Valor total do desconto</label>
+            <input id="desconto-venda-produtos" type="text" inputmode="decimal" placeholder="R$ 0,00" autocomplete="off" />
+          </div>
+
+          <label for="pagamento-venda-produtos">Forma de pagamento</label>
+          <select id="pagamento-venda-produtos" required>
+            <option value="">Selecione a forma de pagamento</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão">Cartão</option>
+          </select>
+
+          <div class="grade-data-hora-venda">
+            <div>
+              <label for="data-venda-produtos">Data</label>
+              <input id="data-venda-produtos" type="date" required />
+            </div>
+            <div>
+              <label for="hora-venda-produtos">Horário</label>
+              <input id="hora-venda-produtos" type="time" required />
+            </div>
+          </div>
+
+          <div class="total-venda-produtos">
+            <span>Total da venda</span>
+            <strong id="total-venda-produtos">R$ 0,00</strong>
+          </div>
+
+          <p id="mensagem-venda-produtos" class="mensagem"></p>
+
+          <div class="botoes-modal">
+            <button class="botao-secundario" type="button" data-fechar="modal-venda-produtos">Cancelar</button>
+            <button class="botao-principal" type="submit">Confirmar venda</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL REGISTRAR SAÍDA
+    ====================================================== -->
+
+    <div
+      id="modal-registrar-saida"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-registrar-saida"
+        >
+          ×
+        </button>
+
+        <h2>
+          Registrar saída
+        </h2>
+
+        <p>
+          Informe os dados da despesa da barbearia.
+        </p>
+
+        <form id="form-registrar-saida">
+          <label for="descricao-saida">
+            Descrição
+          </label>
+
+          <input
+            id="descricao-saida"
+            type="text"
+            placeholder="Ex.: Compra de produtos de limpeza"
+            autocomplete="off"
+            required
+          />
+
+          <label for="valor-saida">
+            Valor
+          </label>
+
+          <input
+            id="valor-saida"
+            type="text"
+            inputmode="decimal"
+            placeholder="R$ 0,00"
+            autocomplete="off"
+            required
+          />
+
+          <label for="forma-pagamento-saida">
+            Forma de pagamento
+          </label>
+
+          <select
+            id="forma-pagamento-saida"
+            required
+          >
+            <option value="">
+              Selecione a forma de pagamento
+            </option>
+
+            <option value="Dinheiro">
+              Dinheiro
+            </option>
+
+            <option value="Pix">
+              Pix
+            </option>
+
+            <option value="Cartão">
+              Cartão
+            </option>
+          </select>
+
+          <label for="data-saida">
+            Data
+          </label>
+
+          <input
+            id="data-saida"
+            type="date"
+            required
+          />
+
+          <label for="hora-saida">
+            Horário
+          </label>
+
+          <input
+            id="hora-saida"
+            type="time"
+            required
+          />
+
+          <p
+            id="mensagem-saida"
+            class="mensagem"
+          ></p>
+
+          <div class="botoes-modal">
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-registrar-saida"
+            >
+              Cancelar
+            </button>
+
+            <button
+              class="botao-principal"
+              type="submit"
+            >
+              Registrar saída
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL REGISTRAR ENTRADA MANUAL
+    ====================================================== -->
+
+    <div id="modal-registrar-entrada" class="modal escondido">
+      <div class="janela">
+        <button class="fechar-modal" type="button" data-fechar="modal-registrar-entrada">×</button>
+
+        <h2>Registrar entrada manual</h2>
+        <p>Use somente para valores adicionados ao caixa fora de atendimentos e planos.</p>
+
+        <form id="form-registrar-entrada">
+          <label for="motivo-entrada">Motivo</label>
+          <input
+            id="motivo-entrada"
+            type="text"
+            placeholder="Ex.: Empréstimo de dinheiro para o caixa"
+            autocomplete="off"
+            required
+          />
+
+          <label for="valor-entrada">Valor</label>
+          <input id="valor-entrada" type="text" inputmode="decimal" placeholder="R$ 0,00" autocomplete="off" required />
+
+          <label for="forma-pagamento-entrada">Forma de entrada</label>
+          <select id="forma-pagamento-entrada" required>
+            <option value="">Selecione a forma de entrada</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cartão">Cartão</option>
+          </select>
+
+          <label for="registrado-por-entrada">Registrado por (usuário atual)</label>
+          <input
+            id="registrado-por-entrada"
+            type="text"
+            placeholder="Usuário conectado"
+            readonly
+          />
+
+          <label for="data-entrada">Data</label>
+          <input id="data-entrada" type="date" required />
+
+          <label for="hora-entrada">Horário</label>
+          <input id="hora-entrada" type="time" required />
+
+          <p id="mensagem-entrada" class="mensagem"></p>
+
+          <div class="botoes-modal">
+            <button class="botao-secundario" type="button" data-fechar="modal-registrar-entrada">Cancelar</button>
+            <button class="botao-principal" type="submit">Registrar entrada</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL ESCOLHER TIPO DE PDF
+    ====================================================== -->
+
+    <div id="modal-tipo-pdf-historico" class="modal escondido">
+      <div class="janela janela-tipo-pdf">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-tipo-pdf-historico"
+        >
+          ×
+        </button>
+
+        <div id="etapa-filtros-pdf-historico">
+          <h2>Configurar PDF</h2>
+          <p>Escolha quais dados deverão aparecer no arquivo.</p>
+
+          <div class="filtros-geracao-pdf">
+            <label for="periodo-pdf-historico">Período</label>
+            <select id="periodo-pdf-historico">
+              <option value="diario" selected>Dia atual</option>
+              <option value="semanal">Semana atual</option>
+              <option value="mensal">Mês atual</option>
+            </select>
+
+            <label for="barbeiro-pdf-historico">Relatório de</label>
+            <select id="barbeiro-pdf-historico">
+              <option value="todos">Barbearia inteira</option>
+            </select>
+
+          </div>
+
+          <div class="botoes-modal">
+            <button class="botao-secundario" type="button" data-fechar="modal-tipo-pdf-historico">Cancelar</button>
+            <button id="confirmar-geracao-pdf-historico" class="botao-principal" type="button">Gerar PDF</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL EDITAR CATÁLOGO
+    ====================================================== -->
+
+    <div
+      id="modal-editar-catalogo"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-editar-catalogo"
+        >
+          ×
+        </button>
+
+        <h2 id="titulo-editar-catalogo">
+          Editar item
+        </h2>
+
+        <form id="form-editar-catalogo">
+          <input
+            id="id-editar-catalogo"
+            type="hidden"
+          />
+
+          <input
+            id="tipo-editar-catalogo"
+            type="hidden"
+          />
+
+          <label for="nome-editar-catalogo">
+            Nome
+          </label>
+
+          <input
+            id="nome-editar-catalogo"
+            type="text"
+            placeholder="Digite o nome"
+            autocomplete="off"
+            required
+          />
+
+          <label for="valor-editar-catalogo">
+            Valor
+          </label>
+
+          <input
+            id="valor-editar-catalogo"
+            type="text"
+            inputmode="decimal"
+            placeholder="R$ 0,00"
+            autocomplete="off"
+            required
+          />
+
+          <p
+            id="mensagem-editar-catalogo"
+            class="mensagem"
+          ></p>
+
+          <div class="botoes-modal">
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-editar-catalogo"
+            >
+              Cancelar
+            </button>
+
+            <button
+              class="botao-principal"
+              type="submit"
+            >
+              Salvar alterações
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL RENOVAR PAGAMENTO DO PLANO
+    ====================================================== -->
+
+    <div id="modal-renovar-plano" class="modal escondido">
+      <div class="janela janela-renovar-plano">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-renovar-plano"
+        >
+          &times;
+        </button>
+
+        <h2>Renovar pagamento</h2>
+        <div id="resumo-renovacao-plano" class="resumo-renovacao-plano">
+          <span id="cliente-renovacao-plano"></span>
+          <span id="nome-renovacao-plano"></span>
+          <strong id="valor-renovacao-plano"></strong>
+        </div>
+
+        <form id="form-renovar-plano">
+          <label for="forma-pagamento-renovacao-plano">
+            Forma de pagamento
+          </label>
+
+          <select id="forma-pagamento-renovacao-plano" required>
+            <option value="">Selecione a forma de pagamento</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Pix">Pix</option>
+            <option value="Cart&atilde;o">Cart&atilde;o</option>
+          </select>
+
+          <p id="mensagem-renovacao-plano" class="mensagem"></p>
+
+          <div class="botoes-modal">
+            <button
+              class="botao-secundario"
+              type="button"
+              data-fechar="modal-renovar-plano"
+            >
+              Voltar
+            </button>
+
+            <button class="botao-principal" type="submit">
+              Confirmar pagamento
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL SAIR
+    ====================================================== -->
+
+    <div
+      id="modal-sair"
+      class="modal escondido"
+    >
+      <div class="janela">
+        <button
+          class="fechar-modal"
+          type="button"
+          data-fechar="modal-sair"
+        >
+          ×
+        </button>
+
+        <h2>
+          Sair do sistema
+        </h2>
+
+        <p>
+          Tem certeza de que deseja sair?
+        </p>
+
+        <div class="botoes-modal">
+          <button
+            class="botao-secundario"
+            type="button"
+            data-fechar="modal-sair"
+          >
+            Continuar no sistema
+          </button>
+
+          <button
+            id="confirmar-sair"
+            class="botao-perigo"
+            type="button"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+
+    <script
+      type="module"
+      src="dashboard.js?v=relatorio-diario-barbeiro-21"
+    ></script>
+
+  </body>
+</html>
