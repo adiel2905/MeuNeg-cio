@@ -30,6 +30,24 @@ service cloud.firestore {
         && usuarioAtual().estabelecimentoId == estabelecimentoId;
     }
 
+    function ehCriadorDoSistema() {
+      return estaLogado()
+        && request.auth.token.email == "adiel.moreirabezerra1@gmail.com";
+    }
+
+    match /solicitacoesCadastro/{usuarioId} {
+      allow create: if estaLogado()
+        && request.auth.uid == usuarioId
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.status == "pendente";
+
+      allow get: if ehCriadorDoSistema()
+        || (estaLogado() && request.auth.uid == usuarioId);
+
+      allow list, update, delete: if ehCriadorDoSistema();
+    }
+
     match /usuarios/{usuarioId} {
       allow read: if estaAtivo()
         && (

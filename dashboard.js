@@ -301,6 +301,10 @@ const horaAgendamento = document.querySelector(
   "#hora-agendamento"
 );
 
+const horaFimAgendamento = document.querySelector(
+  "#hora-fim-agendamento"
+);
+
 const pesquisaClienteAgendamento =
   document.querySelector(
     "#pesquisa-cliente-agendamento"
@@ -895,8 +899,13 @@ const conteudoRelatorioDesempenho =
 const abaRelatorioProdutosDiarios = document.querySelector("#aba-relatorio-produtos-diarios");
 const conteudoRelatorioProdutosDiarios = document.querySelector("#conteudo-relatorio-produtos-diarios");
 const filtroProdutosDiariosBarbeiro = document.querySelector("#filtro-produtos-diarios-barbeiro");
+const periodoRelatorioProdutos = document.querySelector("#periodo-relatorio-produtos");
+const tituloPeriodoProdutos = document.querySelector("#titulo-periodo-produtos");
+const periodoProdutosAnterior = document.querySelector("#periodo-produtos-anterior");
+const periodoProdutosProximo = document.querySelector("#periodo-produtos-proximo");
 const resumoProdutosDiarios = document.querySelector("#resumo-produtos-diarios");
 const listaProdutosDiarios = document.querySelector("#lista-produtos-diarios");
+const quantidadeVendasProdutos = document.querySelector("#quantidade-vendas-produtos");
 
 /* Remove também o campo legado caso um HTML antigo esteja em cache. */
 document.querySelector("#data-produtos-diarios")?.remove();
@@ -2483,6 +2492,7 @@ let mesRelatorio = new Date();
 
 let dataFinanceiro = new Date();
 let dataHistorico = new Date();
+let dataProdutosRelatorio = new Date();
 
 let barbeiroAtual = "";
 
@@ -3854,7 +3864,7 @@ async function abrirTelaConfiguracoes() {
     usuarioAlterarSenha.disabled = false;
 
     descricaoConfiguracaoSenha.textContent =
-      "Altere a senha do administrador, da recepcionista ou de qualquer barbeiro cadastrado.";
+      "Altere a senha do administrador ou de qualquer profissional cadastrado.";
 
     await carregarBarbeiros();
 
@@ -4224,7 +4234,7 @@ async function carregarServicos() {
 function preencherSelectDeBarbeiros() {
   selectBarbeiro.innerHTML = `
     <option value="">
-      Escolha um barbeiro
+      Escolha um profissional
     </option>
   `;
 
@@ -4270,9 +4280,6 @@ function preencherUsuariosParaAlterarSenha() {
       Administrador
     </option>
 
-    <option value="recepcionista">
-      Recepcionista
-    </option>
   `;
 
   barbeiros.forEach(
@@ -4337,15 +4344,13 @@ async function atualizarSenhaAtualSelecionada() {
   }
 
   try {
-    if (selecionado === "administrador" || selecionado === "recepcionista") {
+    if (selecionado === "administrador") {
       const documentoConfiguracao = await getDoc(configuracaoGeral);
       const configuracoes = documentoConfiguracao.exists()
         ? documentoConfiguracao.data()
         : {};
 
-      senhaAtualUsuario.value = selecionado === "administrador"
-        ? (configuracoes.senhaAdministrador || configuracoes.senha || "tradicao123")
-        : (configuracoes.senhaRecepcionista || "recepcao123");
+      senhaAtualUsuario.value = configuracoes.senhaAdministrador || configuracoes.senha || "";
       return;
     }
 
@@ -4353,7 +4358,7 @@ async function atualizarSenhaAtualSelecionada() {
     senhaAtualUsuario.value = barbeiro?.senha || "";
     senhaAtualUsuario.placeholder = barbeiro?.senha
       ? ""
-      : "Este barbeiro ainda não possui senha";
+      : "Este profissional ainda não possui senha";
   } catch (erro) {
     console.log("Erro ao carregar senha atual:", erro);
     senhaAtualUsuario.value = "";
@@ -4530,7 +4535,7 @@ function mostrarProximosAgendamentos() {
 
     listaProximosAgendamentos.innerHTML = `
       <p class="lista-agendamentos-vazia">
-        Escolha um barbeiro para visualizar os horários marcados.
+        Escolha um profissional para visualizar os horários marcados.
       </p>
     `;
 
@@ -4657,7 +4662,192 @@ function mostrarProximosAgendamentos() {
   );
 }
 
+function minutosDoHorario(horario) {
+  const [hora, minuto] = String(horario || "00:00")
+    .split(":")
+    .map(Number);
+
+  return Math.max(
+    0,
+    Math.min(24 * 60, (hora || 0) * 60 + (minuto || 0))
+  );
+}
+
+function horaFinalDoAgendamento(agendamento) {
+  if (agendamento.horaFim) {
+    return agendamento.horaFim;
+  }
+
+  const inicio = minutosDoHorario(agendamento.hora);
+  const fim = Math.min(24 * 60, inicio + 30);
+  const hora = String(Math.floor(fim / 60)).padStart(2, "0");
+  const minuto = String(fim % 60).padStart(2, "0");
+  return `${hora}:${minuto}`;
+}
+
+function mostrarAgendaContinua() {
+  const grade = document.createElement("div");
+  grade.className = "grade-agenda grade-agenda-continua";
+
+  const inicioGrade = 7 * 60;
+  const fimGrade = 22 * 60;
+  const duracaoGrade = fimGrade - inicioGrade;
+  const larguraColuna = Math.round(180 * zoomAgenda);
+  const larguraRegua = Math.round(72 * zoomAgenda);
+  const alturaHora = Math.round(72 * zoomAgenda);
+  const alturaDia = 15 * alturaHora;
+  const tamanhoTexto = Math.round(13 * zoomAgenda);
+
+  grade.style.gridTemplateColumns =
+    `${larguraRegua}px repeat(${dias.length}, ${larguraColuna}px)`;
+  grade.style.setProperty("--largura-coluna", `${larguraColuna}px`);
+  grade.style.setProperty("--largura-regua", `${larguraRegua}px`);
+  grade.style.setProperty("--altura-dia", `${alturaDia}px`);
+  grade.style.setProperty("--altura-hora", `${alturaHora}px`);
+  grade.style.setProperty("--tamanho-texto", `${tamanhoTexto}px`);
+
+  const canto = document.createElement("div");
+  canto.className = "canto-agenda-continua";
+  canto.textContent = "Horário";
+  grade.appendChild(canto);
+
+  dias.forEach((dia) => {
+    const cabecalho = document.createElement("div");
+    cabecalho.className = "dia-cabecalho dia-cabecalho-continuo";
+    cabecalho.textContent = formatarDataParaMostrar(dia);
+    grade.appendChild(cabecalho);
+  });
+
+  const regua = document.createElement("div");
+  regua.className = "regua-horarios";
+
+  for (let hora = 7; hora <= 22; hora++) {
+    const marcador = document.createElement("span");
+    marcador.textContent = `${String(hora).padStart(2, "0")}:00`;
+    marcador.style.top = `${(hora - 7) * alturaHora}px`;
+    regua.appendChild(marcador);
+  }
+
+  grade.appendChild(regua);
+
+  dias.forEach((dia) => {
+    const data = formatarDataParaSalvar(dia);
+    const coluna = document.createElement("div");
+    coluna.className = "coluna-dia-continua";
+    coluna.dataset.data = data;
+    coluna.title = "Clique para adicionar um agendamento";
+
+    const botaoAdicionar = document.createElement("button");
+    botaoAdicionar.type = "button";
+    botaoAdicionar.className = "adicionar-na-coluna";
+    botaoAdicionar.textContent = "+";
+    botaoAdicionar.title = "Adicionar agendamento neste dia";
+    botaoAdicionar.setAttribute(
+      "aria-label",
+      `Adicionar agendamento em ${formatarDataParaMostrar(dia)}`
+    );
+
+    const abrirNovo = async (event) => {
+      event?.stopPropagation();
+
+      if (!barbeiroAtual) {
+        alert("Escolha um profissional antes de criar um agendamento.");
+        return;
+      }
+
+      await abrirNovoAgendamento(data, "");
+    };
+
+    botaoAdicionar.addEventListener("click", abrirNovo);
+    coluna.addEventListener("click", abrirNovo);
+    coluna.appendChild(botaoAdicionar);
+
+    const agendamentosDoDia = agendamentos
+      .filter((agendamento) => agendamento.data === data)
+      .sort((a, b) => String(a.hora || "").localeCompare(String(b.hora || "")));
+
+    agendamentosDoDia.forEach((agendamento) => {
+      const inicio = minutosDoHorario(agendamento.hora);
+      const horaFim = horaFinalDoAgendamento(agendamento);
+      let fim = minutosDoHorario(horaFim);
+      if (fim <= inicio) fim = Math.min(24 * 60, inicio + 30);
+
+      if (fim <= inicioGrade || inicio >= fimGrade) {
+        return;
+      }
+
+      const inicioVisivel = Math.max(inicioGrade, inicio);
+      const fimVisivel = Math.min(fimGrade, fim);
+
+      const bloco = document.createElement("button");
+      bloco.type = "button";
+      bloco.className = "agendamento-continuo";
+      bloco.style.top = `${((inicioVisivel - inicioGrade) / duracaoGrade) * alturaDia}px`;
+      bloco.style.height = `${Math.max(34, ((fimVisivel - inicioVisivel) / duracaoGrade) * alturaDia)}px`;
+
+      const aguardandoPagamento = Boolean(
+        agendamento.status !== "concluido" &&
+        agendamento.status !== "cancelado" &&
+        agendamento.status !== "nao_realizado" &&
+        (
+          agendamento.aguardandoPagamento === true ||
+          (
+            agendamento.dataRegistroServicos &&
+            Array.isArray(agendamento.servicosProduzidos) &&
+            agendamento.servicosProduzidos.length > 0
+          )
+        )
+      );
+
+      if (aguardandoPagamento) bloco.classList.add("aguardando-pagamento");
+      if (agendamento.status === "concluido") bloco.classList.add("concluido");
+      if (
+        agendamento.status === "cancelado" ||
+        agendamento.status === "nao_realizado"
+      ) {
+        bloco.classList.add("nao-realizado");
+      }
+
+      const periodo = document.createElement("strong");
+      periodo.className = "periodo-agendamento-continuo";
+      periodo.textContent = `${agendamento.hora || "--:--"} – ${horaFim}`;
+
+      const nome = document.createElement("span");
+      nome.className = "nome-agendamento-continuo";
+      nome.textContent = agendamento.cliente || "Cliente";
+
+      const tipo = document.createElement("small");
+      tipo.textContent = aguardandoPagamento
+        ? "Aguardando pagamento"
+        : agendamento.servico || agendamento.tipo || "Horário marcado";
+
+      bloco.append(periodo, nome, tipo);
+      bloco.addEventListener("click", (event) => {
+        event.stopPropagation();
+        abrirDetalhes(agendamento);
+      });
+
+      coluna.appendChild(bloco);
+    });
+
+    grade.appendChild(coluna);
+  });
+
+  agenda.innerHTML = "";
+  agenda.appendChild(grade);
+
+  agendaScroll.scrollTop = 0;
+
+  mostrarProximosAgendamentos();
+}
+
 function mostrarAgenda() {
+  return mostrarAgendaContinua();
+
+  /*
+   * Grade antiga em intervalos de 30 minutos mantida abaixo apenas como
+   * referência temporária. O retorno acima ativa a coluna contínua.
+   */
   const grade =
     document.createElement(
       "div"
@@ -4846,7 +5036,7 @@ function mostrarAgenda() {
                 if (!barbeiroAtual) {
 
                   alert(
-                    "Escolha um barbeiro antes de criar um agendamento."
+                    "Escolha um profissional antes de criar um agendamento."
                   );
 
                   return;
@@ -5053,7 +5243,7 @@ function mostrarAgenda() {
                 if (!barbeiroAtual) {
 
                   alert(
-                    "Escolha um barbeiro antes de criar um agendamento."
+                    "Escolha um profissional antes de criar um agendamento."
                   );
 
                   return;
@@ -5142,7 +5332,10 @@ async function abrirNovoAgendamento(
     data;
 
   horaAgendamento.value =
-    hora;
+    hora || "";
+
+  horaFimAgendamento.value =
+    "";
 
   const dataFormatada =
     dataPorTexto(
@@ -5152,7 +5345,7 @@ async function abrirNovoAgendamento(
     );
 
   informacaoHorario.textContent =
-    `${dataFormatada} às ${hora}`;
+    `${dataFormatada} — profissional ${barbeiroAtual} vai atender. Informe o início e o término.`;
 
   modalNovo.classList.remove(
     "escondido"
@@ -5176,7 +5369,7 @@ function abrirDetalhes(
     );
 
   detalheHora.textContent =
-    agendamento.hora;
+    `${agendamento.hora || "--:--"} até ${horaFinalDoAgendamento(agendamento)}`;
 
   const nomesServicosRegistrados = Array.isArray(
     agendamento.servicosProduzidos
@@ -5811,7 +6004,7 @@ formAgendamento.addEventListener(
 
     if (!barbeiroAtual) {
       alert(
-        "Escolha um barbeiro antes de salvar o agendamento."
+        "Escolha um profissional antes de salvar o agendamento."
       );
 
       return;
@@ -5834,6 +6027,40 @@ formAgendamento.addEventListener(
       alert(
         "Escolha o tipo do atendimento."
       );
+
+      return;
+    }
+
+    const minutosInicio =
+      minutosDoHorario(
+        horaAgendamento.value
+      );
+
+    const minutosFim =
+      minutosDoHorario(
+        horaFimAgendamento.value
+      );
+
+    if (
+      !horaAgendamento.value ||
+      !horaFimAgendamento.value
+    ) {
+      alert(
+        "Informe a hora de início e a hora de término."
+      );
+
+      return;
+    }
+
+    if (
+      minutosFim <=
+      minutosInicio
+    ) {
+      alert(
+        "A hora de término precisa ser depois da hora de início."
+      );
+
+      horaFimAgendamento.focus();
 
       return;
     }
@@ -5865,6 +6092,9 @@ formAgendamento.addEventListener(
 
           hora:
             horaAgendamento.value,
+
+          horaFim:
+            horaFimAgendamento.value,
 
           dataCadastro:
             Date.now()
@@ -9308,7 +9538,7 @@ selectBarbeiro.addEventListener(
 
     if (!barbeiroAtual) {
       textoAgenda.textContent =
-        "Escolha um barbeiro para ver a agenda.";
+        "Escolha um profissional para ver a agenda.";
 
       agendamentos = [];
 
@@ -9318,7 +9548,7 @@ selectBarbeiro.addEventListener(
     }
 
     textoAgenda.textContent =
-      `Agenda de ${barbeiroAtual}.`;
+      `Profissional ${barbeiroAtual} vai atender.`;
 
     await atualizarAgenda();
   }
@@ -9453,6 +9683,7 @@ async function abrirRelatorioProdutosDiarios() {
   desativarAbasRelatorio();
   conteudoRelatorioProdutosDiarios?.classList.remove("escondida");
   abaRelatorioProdutosDiarios?.classList.add("ativo");
+  dataProdutosRelatorio = new Date();
   await atualizarProdutosDiarios();
 }
 
@@ -9482,7 +9713,8 @@ async function abrirTelaRelatorio() {
   if (filtroProdutosDiariosBarbeiro) {
     filtroProdutosDiariosBarbeiro.innerHTML = tipoUsuario === "barbeiro"
       ? `<option value="${nomeUsuario}">${nomeUsuario}</option>`
-      : `<option value="todos">Todos os barbeiros</option>`;
+      : `<option value="todos">Todos os profissionais</option>
+         <option value="recepcionista">Recepção</option>`;
 
     if (tipoUsuario !== "barbeiro") {
       barbeiros.forEach((barbeiro) => {
@@ -14236,7 +14468,7 @@ if (
    BOTÕES DAS ABAS
 ========================================================= */
 
-async function atualizarProdutosDiarios() {
+async function atualizarProdutosDiariosLegado() {
   if (!listaProdutosDiarios) return;
 
   const dataSelecionada = formatarDataParaSalvar(new Date());
@@ -14363,6 +14595,192 @@ async function atualizarProdutosDiarios() {
   }
 }
 
+async function atualizarProdutosDiarios() {
+  if (!listaProdutosDiarios) return;
+
+  const tipoPeriodo = periodoRelatorioProdutos?.value || "diario";
+  const periodo = obterPeriodoGenerico(tipoPeriodo, dataProdutosRelatorio);
+  const profissionalSelecionado = filtroProdutosDiariosBarbeiro?.value ||
+    (tipoUsuario === "barbeiro" ? nomeUsuario : "todos");
+
+  if (tituloPeriodoProdutos) {
+    tituloPeriodoProdutos.textContent = periodo.titulo;
+  }
+
+  listaProdutosDiarios.innerHTML =
+    `<p class="lista-vazia">Carregando produtos...</p>`;
+
+  try {
+    const [respostaAgendamentos, respostaMovimentacoes] = await Promise.all([
+      getDocs(collection(db, "agendamentos")),
+      getDocs(collection(db, "movimentacoesFinanceiras"))
+    ]);
+
+    const vendas = [];
+    const nomesProfissionais = new Set(
+      barbeiros.map((profissional) => profissional.nome)
+    );
+
+    const profissionalCompativel = (venda) =>
+      profissionalSelecionado === "todos" ||
+      venda.profissionalChave === profissionalSelecionado;
+
+    const dentroDoPeriodo = (data) =>
+      data >= periodo.inicioTexto && data <= periodo.fimTexto;
+
+    respostaAgendamentos.docs.forEach((documento) => {
+      const agendamento = { id: documento.id, ...documento.data() };
+      if (
+        agendamento.status !== "concluido" ||
+        !dentroDoPeriodo(agendamento.data)
+      ) return;
+
+      const produtosConcluidos = Array.isArray(agendamento.produtos)
+        ? agendamento.produtos
+        : [];
+      const idsVendidosPeloProfissional = new Set(
+        Array.isArray(agendamento.produtosVendidosBarbeiroIds)
+          ? agendamento.produtosVendidosBarbeiroIds
+          : []
+      );
+
+      produtosConcluidos.forEach((produto) => {
+        const vendidoPeloProfissional =
+          idsVendidosPeloProfissional.has(produto.id);
+        const profissionalChave = vendidoPeloProfissional
+          ? (agendamento.barbeiro || "recepcionista")
+          : "recepcionista";
+        const profissional = vendidoPeloProfissional
+          ? (agendamento.barbeiro || "Profissional")
+          : "Recepção";
+        const quantidade = Math.max(1, Number(produto.quantidade) || 1);
+        const venda = {
+          produto: produto.nome || "Produto",
+          quantidade,
+          valor: Number(produto.subtotal) ||
+            (Number(produto.valorUnitario) || Number(produto.valor) || 0) * quantidade,
+          profissional,
+          profissionalChave,
+          cliente: agendamento.cliente || "Não informado",
+          data: agendamento.data,
+          hora: agendamento.hora || "00:00"
+        };
+
+        if (profissionalCompativel(venda)) vendas.push(venda);
+      });
+    });
+
+    respostaMovimentacoes.docs.forEach((documento) => {
+      const movimentacao = { id: documento.id, ...documento.data() };
+      if (
+        movimentacao.tipo !== "entrada" ||
+        movimentacao.origem !== "venda_produtos" ||
+        !dentroDoPeriodo(movimentacao.data)
+      ) return;
+
+      const profissionalSalvo =
+        movimentacao.vendedor || movimentacao.criadoPor || "";
+      const vendidoPorProfissional =
+        movimentacao.tipoVendedor === "barbeiro" ||
+        nomesProfissionais.has(profissionalSalvo);
+      const profissionalChave = vendidoPorProfissional
+        ? profissionalSalvo
+        : "recepcionista";
+      const profissional = vendidoPorProfissional
+        ? profissionalSalvo
+        : "Recepção";
+      const itens = Array.isArray(movimentacao.itens)
+        ? movimentacao.itens
+        : (Array.isArray(movimentacao.produtos) ? movimentacao.produtos : []);
+
+      itens.forEach((produto) => {
+        const quantidade = Math.max(1, Number(produto.quantidade) || 1);
+        const venda = {
+          produto: produto.nome || "Produto",
+          quantidade,
+          valor: Number(produto.subtotal) ||
+            (Number(produto.valorUnitario) || Number(produto.valor) || 0) * quantidade,
+          profissional,
+          profissionalChave,
+          cliente: movimentacao.cliente || "Não informado",
+          data: movimentacao.data,
+          hora: movimentacao.hora || "00:00"
+        };
+
+        if (profissionalCompativel(venda)) vendas.push(venda);
+      });
+    });
+
+    vendas.sort((a, b) =>
+      `${b.data} ${b.hora}`.localeCompare(`${a.data} ${a.hora}`)
+    );
+
+    const quantidadeTotal = vendas.reduce(
+      (total, venda) => total + venda.quantidade,
+      0
+    );
+    const valorTotal = vendas.reduce(
+      (total, venda) => total + venda.valor,
+      0
+    );
+
+    if (resumoProdutosDiarios) {
+      resumoProdutosDiarios.innerHTML = `
+        <div class="cartao-financeiro">
+          <span>Produtos vendidos</span>
+          <strong>${quantidadeTotal}</strong>
+          <small>Quantidade no período</small>
+        </div>
+        <div class="cartao-financeiro">
+          <span>Valor em produtos</span>
+          <strong>${formatarValorEmReal(valorTotal)}</strong>
+          <small>Valor destinado ao estabelecimento</small>
+        </div>
+      `;
+    }
+
+    if (quantidadeVendasProdutos) {
+      quantidadeVendasProdutos.textContent =
+        `${vendas.length} venda${vendas.length === 1 ? "" : "s"}`;
+    }
+
+    listaProdutosDiarios.innerHTML = "";
+
+    if (vendas.length === 0) {
+      listaProdutosDiarios.innerHTML =
+        `<p class="lista-vazia">Nenhum produto vendido neste período.</p>`;
+      return;
+    }
+
+    vendas.forEach((venda) => {
+      const linha = document.createElement("div");
+      linha.className = "linha-produto-relatorio";
+      const dataFormatada =
+        dataPorTexto(venda.data).toLocaleDateString("pt-BR");
+      const campos = [
+        { texto: `${dataFormatada} • ${venda.hora}`, classe: "data-venda-relatorio" },
+        { texto: `${venda.quantidade}x ${venda.produto}`, classe: "produto-venda-relatorio" },
+        { texto: venda.profissional, classe: "vendedor-venda-relatorio" },
+        { texto: venda.cliente, classe: "cliente-venda-relatorio" },
+        { texto: formatarValorEmReal(venda.valor), classe: "valor-venda-relatorio" }
+      ];
+
+      campos.forEach(({ texto, classe }) => {
+        const campo = document.createElement("span");
+        campo.className = classe;
+        campo.textContent = texto;
+        linha.appendChild(campo);
+      });
+
+      listaProdutosDiarios.appendChild(linha);
+    });
+  } catch (erro) {
+    console.log("Erro ao carregar relatório de produtos:", erro);
+    listaProdutosDiarios.innerHTML =
+      `<p class="lista-vazia">Não foi possível carregar os produtos vendidos.</p>`;
+  }
+}
+
 abaRelatorioDesempenho?.addEventListener(
   "click",
   abrirRelatorioDesempenho
@@ -14380,6 +14798,35 @@ abaRelatorioHistorico?.addEventListener(
 
 abaRelatorioProdutosDiarios?.addEventListener("click", abrirRelatorioProdutosDiarios);
 filtroProdutosDiariosBarbeiro?.addEventListener("change", atualizarProdutosDiarios);
+periodoRelatorioProdutos?.addEventListener("change", () => {
+  dataProdutosRelatorio = new Date();
+  atualizarProdutosDiarios();
+});
+
+function navegarPeriodoProdutos(direcao) {
+  const tipoPeriodo = periodoRelatorioProdutos?.value || "diario";
+  const novaData = new Date(dataProdutosRelatorio);
+
+  if (tipoPeriodo === "mensal") {
+    novaData.setMonth(novaData.getMonth() + direcao);
+  } else {
+    novaData.setDate(
+      novaData.getDate() + direcao * (tipoPeriodo === "semanal" ? 7 : 1)
+    );
+  }
+
+  dataProdutosRelatorio = novaData;
+  atualizarProdutosDiarios();
+}
+
+periodoProdutosAnterior?.addEventListener(
+  "click",
+  () => navegarPeriodoProdutos(-1)
+);
+periodoProdutosProximo?.addEventListener(
+  "click",
+  () => navegarPeriodoProdutos(1)
+);
 
 /* =========================================================
    APAGAR HISTÓRICO FINANCEIRO
@@ -14670,7 +15117,7 @@ formAlterarSenha.addEventListener(
 
         if (!barbeiro) {
           mensagemSenha.textContent =
-            "Barbeiro não encontrado.";
+            "Profissional não encontrado.";
 
           return;
         }
@@ -15416,7 +15863,7 @@ async function iniciarDashboard() {
       preencherSelectDeBarbeiros();
 
       textoAgenda.textContent =
-        "Escolha um barbeiro para ver a agenda.";
+        "Escolha um profissional para ver a agenda.";
 
       barbeiroAtual =
         "";
@@ -15436,7 +15883,7 @@ async function iniciarDashboard() {
         nomeUsuario;
 
       textoAgenda.textContent =
-        `Sua agenda: ${barbeiroAtual}.`;
+        `Profissional ${barbeiroAtual} vai atender.`;
 
       await atualizarAgenda();
 

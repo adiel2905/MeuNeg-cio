@@ -10,7 +10,7 @@
 
     <title>MeuNegócio | Painel</title>
 
-    <link rel="stylesheet" href="dashboard.css?v=meunegocio-pastel-1" />
+    <link rel="stylesheet" href="dashboard.css?v=relatorio-produtos-24" />
     <link rel="stylesheet" href="meunegocio-ui.css?v=responsivo-1" />
   </head>
 
@@ -795,9 +795,6 @@
                   Administrador
                 </option>
 
-                <option value="recepcionista">
-                  Recepcionista
-                </option>
               </select>
 
               <label for="senha-atual-usuario">
@@ -934,6 +931,14 @@
               type="button"
             >
               Histórico
+            </button>
+
+            <button
+              id="aba-relatorio-produtos-diarios"
+              class="botao-aba-relatorio"
+              type="button"
+            >
+              Produtos
             </button>
           </div>
 
@@ -1498,6 +1503,76 @@
               </div>
             </div>
           </div>
+
+          <!-- PRODUTOS VENDIDOS -->
+
+          <div
+            id="conteudo-relatorio-produtos-diarios"
+            class="escondida"
+          >
+            <div class="cabecalho-produtos-relatorio">
+              <div>
+                <p class="texto-pequeno">Vendas de produtos</p>
+                <h4>Produtos vendidos</h4>
+                <p>Acompanhe a quantidade e o valor vendido por período e profissional.</p>
+              </div>
+
+              <div class="filtros-produtos-relatorio">
+                <select id="periodo-relatorio-produtos" aria-label="Período dos produtos">
+                  <option value="diario" selected>Diário</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="mensal">Mensal</option>
+                </select>
+
+                <select id="filtro-produtos-diarios-barbeiro" aria-label="Quem vendeu">
+                  <option value="todos">Todos os profissionais</option>
+                  <option value="recepcionista">Recepção</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="navegacao-periodo-produtos">
+              <button id="periodo-produtos-anterior" class="botao-mes" type="button">←</button>
+              <strong id="titulo-periodo-produtos">Hoje</strong>
+              <button id="periodo-produtos-proximo" class="botao-mes" type="button">→</button>
+            </div>
+
+            <div id="resumo-produtos-diarios" class="resumo-produtos-relatorio">
+              <div class="cartao-financeiro">
+                <span>Produtos vendidos</span>
+                <strong>0</strong>
+                <small>Quantidade no período</small>
+              </div>
+
+              <div class="cartao-financeiro">
+                <span>Valor em produtos</span>
+                <strong>R$ 0,00</strong>
+                <small>Valor destinado ao estabelecimento</small>
+              </div>
+            </div>
+
+            <div class="area-produtos-relatorio">
+              <div class="cabecalho-lista-produtos-relatorio">
+                <div>
+                  <p class="texto-pequeno">Detalhamento</p>
+                  <h4>Vendas encontradas</h4>
+                </div>
+                <span id="quantidade-vendas-produtos">0 vendas</span>
+              </div>
+
+              <div class="cabecalho-tabela-produtos-relatorio" aria-hidden="true">
+                <span>Data e hora</span>
+                <span>Produto</span>
+                <span>Profissional</span>
+                <span>Cliente</span>
+                <span>Valor</span>
+              </div>
+
+              <div id="lista-produtos-diarios" class="lista-produtos-relatorio">
+                <p class="lista-vazia">Nenhum produto vendido neste período.</p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
     </div>
@@ -1531,10 +1606,29 @@
             type="hidden"
           />
 
-          <input
-            id="hora-agendamento"
-            type="hidden"
-          />
+          <div class="grade-horario-agendamento">
+            <div>
+              <label for="hora-agendamento">Hora de início</label>
+              <input
+                id="hora-agendamento"
+                type="time"
+                min="07:00"
+                max="22:00"
+                required
+              />
+            </div>
+
+            <div>
+              <label for="hora-fim-agendamento">Hora de término</label>
+              <input
+                id="hora-fim-agendamento"
+                type="time"
+                min="07:00"
+                max="22:00"
+                required
+              />
+            </div>
+          </div>
 
           <div class="tipo-agendamento">
             <p>
@@ -2617,7 +2711,7 @@
 
     <script
       type="module"
-      src="dashboard.js?v=relatorio-diario-barbeiro-21"
+      src="dashboard.js?v=relatorio-produtos-24"
     ></script>
 
   </body>

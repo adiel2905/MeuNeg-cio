@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeuNegócio | Controle Master</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="painel-criador.css?v=master-1" />
+</head>
+<body>
+  <main class="pagina-master">
+    <div class="background" aria-hidden="true"></div>
+
+    <section id="acesso-master" class="cartao-acesso">
+      <a class="voltar" href="index.html">← Voltar para o login</a>
+
+      <div class="simbolo-master" aria-hidden="true">M</div>
+      <p class="rotulo">ACESSO EXCLUSIVO</p>
+      <h1>Controle Master</h1>
+      <p class="descricao">
+        Área de autoridade máxima do MeuNegócio, reservada ao proprietário do sistema.
+      </p>
+
+      <form id="form-master">
+        <div class="campo">
+          <label for="email-master">E-mail</label>
+          <input id="email-master" type="email" autocomplete="email" placeholder="Digite seu e-mail" required />
+        </div>
+
+        <div class="campo">
+          <label for="senha-master">Senha mestre</label>
+          <input id="senha-master" type="password" autocomplete="current-password" placeholder="Digite sua senha mestre" required />
+        </div>
+
+        <div class="campo">
+          <label for="confirmar-senha-master">Confirme a senha mestre</label>
+          <input id="confirmar-senha-master" type="password" autocomplete="current-password" placeholder="Digite novamente a mesma senha" required />
+        </div>
+
+        <p id="mensagem-master" class="mensagem" role="status"></p>
+        <button id="entrar-master" type="submit">Acessar Controle Master <span>→</span></button>
+      </form>
+
+      <p class="identidade">Acesso vinculado ao proprietário do MeuNegócio.</p>
+    </section>
+
+    <section id="painel-master" class="painel escondido">
+      <header class="topo-painel">
+        <div>
+          <p class="rotulo">MEUNEGÓCIO</p>
+          <h1>Painel Master</h1>
+          <p>Controle geral dos estabelecimentos cadastrados no sistema.</p>
+        </div>
+        <button id="sair-master" class="botao-sair" type="button">Sair</button>
+      </header>
+
+      <div class="resumos">
+        <article>
+          <span>Solicitações pendentes</span>
+          <strong id="quantidade-pendentes">0</strong>
+        </article>
+        <article>
+          <span>Estabelecimentos aprovados</span>
+          <strong id="quantidade-aprovados">0</strong>
+        </article>
+        <article>
+          <span>Total de solicitações</span>
+          <strong id="quantidade-total">0</strong>
+        </article>
+      </div>
+
+      <section class="area-solicitacoes">
+        <div class="titulo-secao">
+          <div><p class="rotulo">CADASTROS</p><h2>Solicitações recebidas</h2></div>
+          <span id="status-lista">Carregando...</span>
+        </div>
+        <div id="lista-solicitacoes" class="lista-solicitacoes"></div>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="painel-criador.js?v=master-1"></script>
+</body>
+</html>

@@ -4656,6 +4656,254 @@ body.tema-claro .total-venda-produtos {
   }
 }
 
+
+/* =========================================================
+   AGENDA CONTÍNUA — SEM INTERVALOS PRÉ-DEFINIDOS
+========================================================= */
+
+.grade-agenda.grade-agenda-continua {
+  display: grid; align-items: start; gap: 8px; padding: 8px;
+  background: #f2f4f1 !important;
+}
+.canto-agenda-continua {
+  position: sticky; top: 0; left: 0; z-index: 7;
+  width: var(--largura-regua); height: 54px;
+  display: grid; place-items: center;
+  border: 1px solid #d4ded9; border-radius: 12px;
+  color: #53675e; background: #edf3f0;
+  font-size: .72rem; font-weight: 800; text-transform: uppercase;
+}
+.dia-cabecalho-continuo {
+  position: sticky; top: 0; z-index: 5;
+  min-width: var(--largura-coluna); height: 54px;
+  display: grid; place-items: center;
+  border: 1px solid #d8e0dc; border-radius: 12px;
+  color: #3f554b; background: rgba(255,255,255,.96) !important;
+  box-shadow: 0 5px 14px rgba(48,64,57,.07);
+  font-size: var(--tamanho-texto); font-weight: 800;
+}
+.regua-horarios {
+  position: sticky; left: 0; z-index: 4;
+  width: var(--largura-regua); height: var(--altura-dia);
+  border: 1px solid #d4ded9; border-radius: 12px;
+  color: #52645c; background: #f5f8f6;
+}
+.regua-horarios span {
+  position: absolute; left: 0; width: 100%;
+  padding-right: 9px; text-align: right;
+  font-size: .72rem; font-weight: 800;
+  transform: translateY(-50%);
+}
+.regua-horarios span:first-child { transform: translateY(5px); }
+.regua-horarios span:last-child { transform: translateY(calc(-100% - 5px)); }
+.coluna-dia-continua {
+  position: relative; min-width: var(--largura-coluna); height: var(--altura-dia);
+  overflow: hidden; border: 1px solid #dbe3df; border-radius: 12px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(var(--altura-hora) - 1px),
+      rgba(111, 137, 125, .18) calc(var(--altura-hora) - 1px),
+      rgba(111, 137, 125, .18) var(--altura-hora)
+    ),
+    #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); cursor: pointer;
+}
+.coluna-dia-continua:hover { border-color: #9bb2a7; background-color: #fbfdfc; }
+.adicionar-na-coluna {
+  position: absolute; z-index: 3; top: 12px; left: 50%; right: auto;
+  width: 34px; height: 34px; display: grid; place-items: center; padding: 0;
+  border: 1px solid #b8c9c1; border-radius: 50%; color: #4d685c;
+  background: rgba(255,255,255,.92); box-shadow: 0 5px 14px rgba(54,72,64,.11);
+  font-size: 1.2rem; line-height: 1; font-weight: 800; cursor: pointer;
+  transform: translateX(-50%);
+}
+.adicionar-na-coluna:hover {
+  color: #fff; background: #607d70;
+  transform: translateX(-50%) scale(1.06);
+}
+.agendamento-continuo {
+  position: absolute; z-index: 2; left: 7px; right: 7px;
+  width: calc(100% - 14px); min-height: 34px;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+  gap: 2px; overflow: hidden; padding: 6px 8px;
+  border: 1px solid #c39c47; border-left: 5px solid #9d7625; border-radius: 8px;
+  color: #2f2818; background: #ecd493; box-shadow: 0 5px 12px rgba(72,58,25,.14);
+  text-align: left; cursor: pointer;
+}
+.agendamento-continuo:hover { z-index: 4; filter: brightness(1.03); transform: translateY(-1px); }
+.periodo-agendamento-continuo { font-size: .7rem; line-height: 1.1; }
+.nome-agendamento-continuo {
+  width: 100%; overflow: hidden; font-size: .78rem; font-weight: 800;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.agendamento-continuo small {
+  width: 100%; overflow: hidden; font-size: .64rem;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+.agendamento-continuo.concluido {
+  border-color: #479766; border-left-color: #247245; color: #fff; background: #55a875;
+}
+.agendamento-continuo.nao-realizado {
+  border-color: #b85a5a; border-left-color: #813636; color: #fff; background: #c86c6c;
+}
+.agendamento-continuo.aguardando-pagamento {
+  border-color: #4f8caf; border-left-color: #266787; color: #fff; background: #65a3c4;
+}
+.grade-horario-agendamento {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 8px 0 16px;
+}
+.grade-horario-agendamento > div { display: grid; gap: 7px; }
+.grade-horario-agendamento input { width: 100%; }
+@media (max-width: 560px) {
+  .grade-horario-agendamento { grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   RELATÓRIO DE PRODUTOS
+========================================================= */
+
+.cabecalho-produtos-relatorio,
+.cabecalho-lista-produtos-relatorio,
+.navegacao-periodo-produtos {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.cabecalho-produtos-relatorio h4,
+.cabecalho-lista-produtos-relatorio h4 {
+  margin: 0;
+  color: #40564c;
+  font-size: 20px;
+}
+
+.cabecalho-produtos-relatorio p:not(.texto-pequeno) {
+  margin: 7px 0 0;
+  color: #718078;
+}
+
+.filtros-produtos-relatorio {
+  display: flex;
+  gap: 10px;
+}
+
+.filtros-produtos-relatorio select {
+  min-width: 180px;
+  padding: 11px 12px;
+  border: 1px solid #d5dfda;
+  border-radius: 10px;
+  color: #35423c;
+  background: #fff;
+}
+
+.navegacao-periodo-produtos {
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.navegacao-periodo-produtos strong {
+  min-width: 230px;
+  color: #42574d;
+  text-align: center;
+}
+
+.resumo-produtos-relatorio {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.area-produtos-relatorio {
+  overflow: hidden;
+  border: 1px solid #dce4e0;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(64, 83, 74, .08);
+}
+
+.cabecalho-lista-produtos-relatorio {
+  padding: 17px;
+  border-bottom: 1px solid #e1e7e4;
+}
+
+.cabecalho-lista-produtos-relatorio span {
+  color: #718078;
+  font-size: 13px;
+}
+
+.cabecalho-tabela-produtos-relatorio,
+.linha-produto-relatorio {
+  display: grid;
+  grid-template-columns: 135px minmax(180px, 2fr) minmax(130px, 1fr) minmax(140px, 1fr) 115px;
+  gap: 14px;
+  align-items: center;
+}
+
+.cabecalho-tabela-produtos-relatorio {
+  padding: 11px 16px;
+  color: #50685d;
+  background: #edf3f0;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.linha-produto-relatorio {
+  padding: 14px 16px;
+  border-top: 1px solid #e4e9e7;
+  color: #46534d;
+}
+
+.linha-produto-relatorio:first-child { border-top: 0; }
+.linha-produto-relatorio .produto-venda-relatorio,
+.linha-produto-relatorio .valor-venda-relatorio {
+  color: #3f6152;
+  font-weight: 800;
+}
+.lista-produtos-relatorio .lista-vazia { padding: 24px 16px; }
+
+@media (max-width: 760px) {
+  .cabecalho-produtos-relatorio {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .filtros-produtos-relatorio {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .filtros-produtos-relatorio select { min-width: 0; width: 100%; }
+  .navegacao-periodo-produtos strong { min-width: 0; flex: 1; font-size: 13px; }
+  .resumo-produtos-relatorio { gap: 8px; }
+  .cabecalho-tabela-produtos-relatorio { display: none; }
+  .linha-produto-relatorio {
+    grid-template-columns: 1fr auto;
+    gap: 5px 10px;
+    padding: 13px;
+  }
+  .linha-produto-relatorio .data-venda-relatorio,
+  .linha-produto-relatorio .vendedor-venda-relatorio,
+  .linha-produto-relatorio .cliente-venda-relatorio {
+    grid-column: 1;
+    color: #77857e;
+    font-size: 12px;
+  }
+  .linha-produto-relatorio .produto-venda-relatorio {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .linha-produto-relatorio .valor-venda-relatorio {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+}
+
+
 /* Remove os últimos componentes escuros e dourados do sistema antigo. */
 .menu-lateral,
 body.tema-claro .menu-lateral {

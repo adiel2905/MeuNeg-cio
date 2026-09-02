@@ -23,10 +23,17 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="login1.css?v=meunegocio-1" />
+    <link rel="stylesheet" href="login1.css?v=acesso-profissionais-1" />
   </head>
 
   <body>
+    <a
+      class="acesso-criador"
+      href="painel-criador.html"
+      aria-label="Abrir acesso reservado do criador"
+      title="Acesso reservado"
+    >•••</a>
+
     <main class="login-page">
       <div class="background"></div>
       <div class="background-overlay"></div>
@@ -46,12 +53,12 @@
 
         <!-- PRIMEIRA ETAPA: ESCOLHER O TIPO DE USUÁRIO -->
 
-        <section id="etapa-tipo-usuario">
+        <section id="etapa-tipo-usuario" class="etapa escondida">
           <div class="welcome">
             <h2>Bem-vindo</h2>
 
             <p>
-              Selecione como você deseja acessar o sistema.
+              Quem vai acessar o sistema agora?
             </p>
           </div>
 
@@ -65,52 +72,24 @@
 
               <span class="texto-botao">
                 <strong>Administrador</strong>
-                <small>Gerenciar toda a barbearia</small>
+                <small>Gerenciar todo o estabelecimento</small>
               </span>
 
               <span class="seta">→</span>
             </button>
 
-            <button
-              id="botao-tipo-recepcionista"
-              class="botao-tipo"
-              type="button"
-            >
-              <span class="icone-usuario">R</span>
-
-              <span class="texto-botao">
-                <strong>Recepcionista</strong>
-                <small>Gerenciar agendas e atendimentos</small>
-              </span>
-
-              <span class="seta">→</span>
-            </button>
-
-            <button
-              id="botao-tipo-barbeiro"
-              class="botao-tipo"
-              type="button"
-            >
-              <span class="icone-usuario">B</span>
-
-              <span class="texto-botao">
-                <strong>Barbeiro</strong>
-                <small>Acessar agenda e atendimentos</small>
-              </span>
-
-              <span class="seta">→</span>
-            </button>
+            <div id="opcoes-profissionais-login" class="opcoes-profissionais-login"></div>
           </div>
         </section>
 
-        <!-- SEGUNDA ETAPA: ESCOLHER O BARBEIRO -->
+        <!-- ESCOLHER UM PROFISSIONAL -->
 
         <section
           id="etapa-barbeiros"
           class="etapa escondida"
         >
           <div class="welcome">
-            <h2>Escolha o barbeiro</h2>
+            <h2>Escolha o profissional</h2>
 
             <p>
               Selecione o seu usuário para continuar.
@@ -122,7 +101,7 @@
             class="lista-barbeiros"
           >
             <p class="carregando">
-              Carregando barbeiros...
+              Carregando profissionais...
             </p>
           </div>
 
@@ -140,22 +119,22 @@
           </button>
         </section>
 
-        <!-- TERCEIRA ETAPA: DIGITAR A SENHA -->
+        <!-- PRIMEIRA ETAPA: LOGIN DO ESTABELECIMENTO -->
 
         <section
-          id="etapa-senha"
-          class="etapa escondida"
+          id="etapa-login-estabelecimento"
+          class="etapa"
         >
           <div class="welcome">
             <p
-              id="tipo-usuario-selecionado"
+              id="tipo-acesso-estabelecimento"
               class="tipo-selecionado"
             >
               Acesso
             </p>
 
-            <h2 id="nome-usuario-selecionado">
-              Usuário
+            <h2 id="titulo-acesso-estabelecimento">
+              MeuNegócio
             </h2>
 
             <p>
@@ -251,6 +230,11 @@
               </button>
             </div>
 
+            <p class="convite-cadastro">
+              Ainda não tem cadastro?
+              <a href="cadastro.html">Cadastre-se</a>
+            </p>
+
             <p
               id="form-message"
               class="form-message"
@@ -266,23 +250,74 @@
           </form>
 
           <button
-            id="voltar-selecao"
-            class="botao-voltar"
+              id="sair-estabelecimento"
+            class="botao-voltar escondida"
             type="button"
           >
-            ← Trocar usuário
+            ← Trocar estabelecimento
           </button>
+        </section>
+
+        <!-- SENHA INTERNA DO ADMINISTRADOR OU PROFISSIONAL -->
+
+        <section id="etapa-senha" class="etapa escondida">
+          <div class="welcome">
+            <p id="tipo-usuario-selecionado" class="tipo-selecionado">Acesso interno</p>
+            <h2 id="nome-usuario-selecionado">Usuário</h2>
+            <p id="instrucao-senha-interna">Digite a sua senha para continuar.</p>
+          </div>
+
+          <form id="login-interno-form">
+            <label for="password-interno">Senha</label>
+            <div class="password-field">
+              <svg class="lock-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm6 4v3" />
+              </svg>
+              <input id="password-interno" type="password" placeholder="Digite sua senha" autocomplete="current-password" required />
+            </div>
+
+            <div id="campo-confirmar-senha-interna" class="escondida">
+              <label for="confirmar-senha-interna">Repita a senha</label>
+              <div class="password-field">
+                <svg class="lock-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 10V7a5 5 0 0 1 10 0v3M6 10h12a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Zm6 4v3" />
+                </svg>
+                <input id="confirmar-senha-interna" type="password" placeholder="Repita sua senha" autocomplete="new-password" />
+              </div>
+            </div>
+
+            <p id="mensagem-login-interno" class="form-message"></p>
+            <button id="botao-entrar-interno" class="submit-button" type="submit">
+              Entrar <span>→</span>
+            </button>
+          </form>
+
+          <button id="voltar-selecao" class="botao-voltar" type="button">← Trocar usuário</button>
         </section>
 
         <p class="footer-text">
           Sua rotina organizada em um só lugar.
         </p>
+
+        <div class="seletor-paleta" aria-label="Escolha a cor da tela">
+          <span>Escolha sua cor</span>
+          <div class="opcoes-paleta">
+            <button class="cor-paleta cor-verde ativa" type="button" data-paleta="verde" aria-label="Tema verde pastel" title="Verde pastel"></button>
+            <button class="cor-paleta cor-azul" type="button" data-paleta="azul" aria-label="Tema azul pastel" title="Azul pastel"></button>
+            <button class="cor-paleta cor-marinho" type="button" data-paleta="marinho" aria-label="Tema azul-marinho" title="Azul-marinho"></button>
+            <button class="cor-paleta cor-grafite" type="button" data-paleta="grafite" aria-label="Tema grafite" title="Grafite"></button>
+            <button class="cor-paleta cor-amarelo" type="button" data-paleta="amarelo" aria-label="Tema amarelo pastel" title="Amarelo pastel"></button>
+            <button class="cor-paleta cor-laranja" type="button" data-paleta="laranja" aria-label="Tema laranja pastel" title="Laranja pastel"></button>
+            <button class="cor-paleta cor-vermelho" type="button" data-paleta="vermelho" aria-label="Tema vermelho pastel" title="Vermelho pastel"></button>
+            <button class="cor-paleta cor-lilas" type="button" data-paleta="lilas" aria-label="Tema lilás pastel" title="Lilás pastel"></button>
+          </div>
+        </div>
       </section>
     </main>
 
     <script
       type="module"
-      src="login1.js"
+      src="login1.js?v=acesso-profissionais-1"
     ></script>
   </body>
 </html>

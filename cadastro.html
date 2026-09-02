@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeuNegócio | Cadastre-se</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="cadastro.css?v=cadastro-1" />
+</head>
+<body>
+  <main class="pagina-cadastro">
+    <div class="background" aria-hidden="true"></div>
+
+    <section class="cartao-cadastro">
+      <a class="voltar" href="index.html">← Voltar para entrar</a>
+
+      <header class="brand">
+        <span class="brand-symbol" aria-hidden="true">M</span>
+        <div>
+          <strong>MeuNegócio</strong>
+          <small>Gestão simples. Crescimento real.</small>
+        </div>
+      </header>
+
+      <div class="cabecalho">
+        <p class="rotulo">NOVO CADASTRO</p>
+        <h1>Crie seu acesso</h1>
+        <p>Preencha os dados do seu estabelecimento. O acesso será liberado após a aprovação.</p>
+      </div>
+
+      <form id="form-cadastro">
+        <div class="grade duas-colunas">
+          <div class="campo">
+            <label for="nome-administrador">Nome da pessoa administradora</label>
+            <input id="nome-administrador" type="text" autocomplete="name" placeholder="Digite seu nome completo" required />
+          </div>
+
+          <div class="campo">
+            <label for="nome-estabelecimento">Nome do estabelecimento</label>
+            <input id="nome-estabelecimento" type="text" autocomplete="organization" placeholder="Ex.: Espaço da Ana" required />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="tipo-estabelecimento">Tipo de estabelecimento</label>
+          <select id="tipo-estabelecimento" required>
+            <option value="">Selecione uma opção</option>
+            <option value="barbearia">Barbearia</option>
+            <option value="manicure-pedicure">Manicure e Pedicure</option>
+            <option value="nail-designer">Nail Designer</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+
+        <div id="campo-outro-tipo" class="campo escondido">
+          <label for="outro-tipo">Qual é o tipo do seu estabelecimento?</label>
+          <input id="outro-tipo" type="text" placeholder="Ex.: Salão de beleza, estética, loja..." />
+        </div>
+
+        <div class="campo">
+          <label for="email-cadastro">E-mail</label>
+          <input id="email-cadastro" type="email" autocomplete="email" placeholder="Digite seu melhor e-mail" required />
+        </div>
+
+        <div class="grade duas-colunas">
+          <div class="campo">
+            <label for="senha-cadastro">Crie uma senha</label>
+            <input id="senha-cadastro" type="password" autocomplete="new-password" minlength="6" placeholder="Mínimo de 6 caracteres" required />
+          </div>
+
+          <div class="campo">
+            <label for="repetir-senha">Repita a senha</label>
+            <input id="repetir-senha" type="password" autocomplete="new-password" minlength="6" placeholder="Digite a senha novamente" required />
+          </div>
+        </div>
+
+        <p class="aviso-senha">Sua senha é protegida e não fica visível para o administrador.</p>
+        <p id="mensagem-cadastro" class="mensagem" role="status"></p>
+
+        <button id="enviar-cadastro" type="submit">Enviar solicitação <span>→</span></button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="cadastro.js?v=cadastro-1"></script>
+</body>
+</html>
+
